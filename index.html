@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Search, Heart, ShoppingCart, Sun, Moon, 
-  X, Star, Truck, RotateCcw, CheckCircle, AlertCircle, Trash2 
+  Search, Heart, ShoppingBag, Sun, Moon, 
+  X, Star, Truck, RefreshCw, CheckCircle, AlertCircle 
 } from 'lucide-react';
 
-// --- MEVCUT ÜRÜN VERİLERİ (Görsel Galerisi Entegre Edildi) ---
+// --- MOCK VERİLER ---
 const INITIAL_PRODUCTS = [
   {
     id: 1,
@@ -45,20 +45,17 @@ const INITIAL_PRODUCTS = [
   }
 ];
 
-export default function App() {
-  // --- 💾 1. LOCALSTORAGE (Kalıcı Hafıza) ENTEGRASYONU ---
+export default function CompleteECommerceApp() {
+  // --- 3. LOCALSTORAGE & STATE YÖNETİMİ ---
   const [darkMode, setDarkMode] = useState(() => {
     return JSON.parse(localStorage.getItem('darkMode')) || false;
   });
-
   const [cart, setCart] = useState(() => {
     return JSON.parse(localStorage.getItem('cart')) || [];
   });
-
   const [favorites, setFavorites] = useState(() => {
     return JSON.parse(localStorage.getItem('favorites')) || [];
   });
-
   const [orders, setOrders] = useState(() => {
     return JSON.parse(localStorage.getItem('orders')) || [
       { id: 'ORD-9821', status: 'Hazırlanıyor', total: 1299, date: '2026-08-01' },
@@ -66,26 +63,25 @@ export default function App() {
     ];
   });
 
-  // --- STATE'LER ---
+  // UI State'leri
   const [searchTerm, setSearchTerm] = useState('');
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false); // 📱 Mobil Arama
-  const [selectedProduct, setSelectedProduct] = useState(null); // 📸 Ürün Modal
-  const [selectedImage, setSelectedImage] = useState(''); // 📸 Seçili Galeri Görseli
-  const [toast, setToast] = useState(null); // 🔔 Toast Alert State
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState('');
+  const [toast, setToast] = useState(null); // Modern Toast Bildirimi
 
-  // 🏷️ Detaylı Filtre State'i
+  // Filtreler
   const [filters, setFilters] = useState({
     brand: '',
     minRating: 0,
-    fastShipping: false,
-    maxPrice: 5000
+    fastShipping: false
   });
 
-  // 🎟️ Kupon State'i
+  // Kupon State
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
 
-  // --- LOCALSTORAGE ETKİLEŞİMLERİ ---
+  // --- LOCALSTORAGE SENKRONİZASYONU ---
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
     if (darkMode) {
@@ -107,13 +103,13 @@ export default function App() {
     localStorage.setItem('orders', JSON.stringify(orders));
   }, [orders]);
 
-  // --- 🔔 2. MODERN TOAST BİLDİRİMİ (alert yerine) ---
+  // --- TOAST BİLDİRİM FONKSİYONU ---
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
 
-  // --- İŞLEVSEL FONKSİYONLAR ---
+  // --- HESAPLAMALAR & FONKSİYONLAR ---
   const toggleFavorite = (product) => {
     const isFav = favorites.some((item) => item.id === product.id);
     if (isFav) {
@@ -130,19 +126,12 @@ export default function App() {
     showToast(`${product.title} sepete eklendi!`);
   };
 
-  const removeFromCart = (index) => {
-    const updatedCart = [...cart];
-    updatedCart.splice(index, 1);
-    setCart(updatedCart);
-    showToast('Ürün sepetten çıkarıldı.', 'info');
-  };
-
   const handleApplyCoupon = () => {
     if (couponCode.toUpperCase() === 'INDIRIM50') {
       setDiscount(0.5);
       showToast('%50 İndirim kuponu uygulandı!');
     } else {
-      showToast('Geçersiz kupon kodu.', 'error');
+      showToast('Geçersiz Kupon Kodu', 'error');
     }
   };
 
@@ -151,26 +140,25 @@ export default function App() {
     showToast(`Sipariş durumu güncellendi: ${newStatus}`);
   };
 
-  // 🏷️ Detaylı Filtreleme Mantığı
+  // Filtreleme Mantığı
   const filteredProducts = INITIAL_PRODUCTS.filter((product) => {
     const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesBrand = filters.brand === '' || product.brand === filters.brand;
     const matchesRating = product.rating >= filters.minRating;
     const matchesShipping = !filters.fastShipping || product.isFastShipping;
-    const matchesPrice = product.price <= filters.maxPrice;
 
-    return matchesSearch && matchesBrand && matchesRating && matchesShipping && matchesPrice;
+    return matchesSearch && matchesBrand && matchesRating && matchesShipping;
   });
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
   const finalTotal = cartTotal * (1 - discount);
 
   return (
-    <div className={`min-h-screen flex flex-col transition-colors duration-200 ${darkMode ? 'dark bg-slate-900 text-slate-100' : 'bg-gray-50 text-gray-800'}`}>
+    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-200 ${darkMode ? 'dark bg-slate-900 text-slate-100' : 'bg-gray-50 text-gray-800'}`}>
       
-      {/* 🔔 MODERN TOAST ALERT */}
+      {/* --- MODERN TOAST BİLDİRİMİ --- */}
       {toast && (
-        <div className={`fixed bottom-5 right-5 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-2xl text-white transition-all duration-300 ${
+        <div className={`fixed bottom-5 right-5 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-2xl text-white transition-all transform translate-y-0 ${
           toast.type === 'error' ? 'bg-red-600' : toast.type === 'info' ? 'bg-blue-600' : 'bg-emerald-600'
         }`}>
           {toast.type === 'error' ? <AlertCircle size={20} /> : <CheckCircle size={20} />}
@@ -178,63 +166,61 @@ export default function App() {
         </div>
       )}
 
-      {/* --- HEADER (Mobil Arama ve Koyu Tema Düzeltmeleri Entegre Edildi) --- */}
-      <header className="sticky top-0 z-40 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 shadow-sm">
+      {/* --- HEADER --- */}
+      <header className="sticky top-0 z-40 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-gray-200 dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
-          
           <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
             MağazaPro
           </h1>
 
-          {/* Masaüstü Arama Çubuğu */}
+          {/* Masaüstü Arama */}
           <div className="hidden md:flex flex-1 max-w-md relative">
             <input 
               type="text" 
               placeholder="Ürün, marka ara..." 
               value={searchTerm} 
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
           </div>
 
-          {/* İkonlar & Aksiyonlar */}
+          {/* Aksiyon İkonları */}
           <div className="flex items-center gap-3">
-            
-            {/* 📱 Mobilde Arama Butonu */}
+            {/* 📱 Mobil Arama Butonu */}
             <button 
-              className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg"
+              className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
             >
               <Search size={20} />
             </button>
 
-            {/* 🌙 Tam Koyu Tema Butonu */}
+            {/* Dark Mode Toggle */}
             <button 
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full"
             >
               {darkMode ? <Sun size={20} className="text-amber-400" /> : <Moon size={20} />}
             </button>
 
-            {/* ❤️ Favoriler İkonu */}
+            {/* Favoriler */}
             <div className="relative">
-              <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg">
+              <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full">
                 <Heart size={20} />
                 {favorites.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                  <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">
                     {favorites.length}
                   </span>
                 )}
               </button>
             </div>
 
-            {/* Sepet İkonu */}
+            {/* Sepet */}
             <div className="relative">
-              <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg">
-                <ShoppingCart size={20} />
+              <button className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full">
+                <ShoppingBag size={20} />
                 {cart.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                  <span className="absolute top-0 right-0 bg-blue-600 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">
                     {cart.length}
                   </span>
                 )}
@@ -243,7 +229,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* 📱 Mobil Arama Girdi Alanı */}
+        {/* 📱 Mobil Açılır Arama Çubuğu */}
         {isMobileSearchOpen && (
           <div className="p-3 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 md:hidden">
             <div className="relative">
@@ -252,7 +238,7 @@ export default function App() {
                 placeholder="Ürün ara..." 
                 value={searchTerm} 
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none"
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-slate-600 dark:bg-slate-700 focus:outline-none"
               />
               <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
             </div>
@@ -260,36 +246,22 @@ export default function App() {
         )}
       </header>
 
-      {/* --- ANA İÇERİK DÜZENİ --- */}
+      {/* --- ANA İÇERİK --- */}
       <main className="max-w-7xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        {/* 🏷️ DETAYLI FİLTRELEME ALANI */}
-        <aside className="lg:col-span-1 space-y-6 bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 h-fit">
-          <h3 className="font-bold text-lg border-b pb-2 dark:border-slate-700">Filtrele</h3>
+        {/* --- 2. DETAYLI FİLTRELEME --- */}
+        <aside className="lg:col-span-1 space-y-6 bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm h-fit border border-gray-100 dark:border-slate-700">
+          <h3 className="font-bold text-lg border-b pb-2 dark:border-slate-700">Filtreler</h3>
           
-          {/* Fiyat Aralığı */}
-          <div>
-            <label className="text-sm font-semibold mb-2 block">Maksimum Fiyat: {filters.maxPrice} ₺</label>
-            <input 
-              type="range" 
-              min="500" 
-              max="5000" 
-              step="100"
-              value={filters.maxPrice}
-              onChange={(e) => setFilters({...filters, maxPrice: Number(e.target.value)})}
-              className="w-full"
-            />
-          </div>
-
-          {/* Marka Seçimi */}
+          {/* Marka */}
           <div>
             <label className="text-sm font-semibold mb-2 block">Marka</label>
             <select 
-              className="w-full p-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+              className="w-full p-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600"
               value={filters.brand}
               onChange={(e) => setFilters({...filters, brand: e.target.value})}
             >
-              <option value="">Tüm Markalar</option>
+              <option value="">Tümü</option>
               <option value="Apple">Apple</option>
               <option value="Samsung">Samsung</option>
               <option value="Nike">Nike</option>
@@ -312,14 +284,14 @@ export default function App() {
             </div>
           </div>
 
-          {/* Kargo Seçeneği */}
-          <div className="flex items-center gap-2 pt-2">
+          {/* Kargo Filtresi */}
+          <div className="flex items-center gap-2">
             <input 
               type="checkbox" 
               id="fastShipping"
               checked={filters.fastShipping}
               onChange={(e) => setFilters({...filters, fastShipping: e.target.checked})}
-              className="rounded text-blue-600 focus:ring-blue-500"
+              className="rounded text-blue-600"
             />
             <label htmlFor="fastShipping" className="text-sm font-medium flex items-center gap-1 cursor-pointer">
               <Truck size={16} className="text-blue-500" /> Aynı Gün Kargo
@@ -327,24 +299,19 @@ export default function App() {
           </div>
         </aside>
 
-        {/* ÜRÜNLER VE SEPET ALANI */}
+        {/* --- ÜRÜN LİSTESİ VE SEPET --- */}
         <section className="lg:col-span-3 space-y-8">
           
-          {/* Ürün Listesi Izgarası */}
+          {/* Ürün Izgarası */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {filteredProducts.map((product) => {
               const isFav = favorites.some(item => item.id === product.id);
               return (
                 <div key={product.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-md transition">
-                  
-                  {/* Görsel Alana Tıklandığında Galeri Modal Açılır */}
-                  <div 
-                    className="relative h-48 bg-gray-100 dark:bg-slate-700 cursor-pointer" 
-                    onClick={() => { setSelectedProduct(product); setSelectedImage(product.images[0]); }}
-                  >
+                  <div className="relative h-48 bg-gray-100 dark:bg-slate-700 cursor-pointer" onClick={() => { setSelectedProduct(product); setSelectedImage(product.images[0]); }}>
                     <img src={product.images[0]} alt={product.title} className="w-full h-full object-cover" />
                     
-                    {/* ❤️ Favori Butonu */}
+                    {/* Favori Butonu */}
                     <button 
                       onClick={(e) => { e.stopPropagation(); toggleFavorite(product); }}
                       className="absolute top-3 right-3 p-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur rounded-full hover:scale-110 transition"
@@ -356,20 +323,18 @@ export default function App() {
                   <div className="p-4 space-y-2">
                     <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
                       <span>{product.brand}</span>
-                      <span className="flex items-center gap-1 text-amber-500 font-semibold">
-                        <Star size={12} fill="currentColor" /> {product.rating}
-                      </span>
+                      <span className="flex items-center gap-1 text-amber-500 font-semibold"><Star size={12} fill="currentColor" /> {product.rating}</span>
                     </div>
 
-                    <h4 className="font-semibold line-clamp-1 dark:text-white">{product.title}</h4>
+                    <h4 className="font-semibold line-clamp-1">{product.title}</h4>
                     
                     <div className="flex items-center justify-between pt-2">
-                      <span className="text-lg font-bold dark:text-white">{product.price} ₺</span>
+                      <span className="text-lg font-bold">{product.price} ₺</span>
                       <button 
                         onClick={() => addToCart(product)}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition"
                       >
-                        Sepete Ekle
+                        Ekle
                       </button>
                     </div>
                   </div>
@@ -378,42 +343,23 @@ export default function App() {
             })}
           </div>
 
-          {/* 🎟️ SEPET VE MANUEL KUPON KODU ALANI */}
+          {/* --- MANUEL KUPON KODU & SEPET ÖZETİ --- */}
           {cart.length > 0 && (
-            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 space-y-4 shadow-sm">
-              <h3 className="font-bold text-lg dark:text-white">Sepetiniz</h3>
-              
-              <div className="divide-y dark:divide-slate-700">
-                {cart.map((item, index) => (
-                  <div key={index} className="py-2 flex justify-between items-center">
-                    <div>
-                      <p className="font-medium text-sm dark:text-white">{item.title}</p>
-                      <p className="text-xs text-gray-500">{item.price} ₺</p>
-                    </div>
-                    <button onClick={() => removeFromCart(index)} className="text-red-500 p-1 hover:bg-red-50 dark:hover:bg-slate-700 rounded">
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              {/* Kupon Girdi Alanı */}
-              <div className="flex gap-2 pt-2">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 space-y-4">
+              <h3 className="font-bold text-lg">Sepet Özeti</h3>
+              <div className="flex gap-2">
                 <input 
                   type="text" 
                   placeholder="Kupon Kodu (Örn: INDIRIM50)" 
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
-                  className="flex-1 p-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white text-sm"
+                  className="flex-1 p-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600"
                 />
-                <button onClick={handleApplyCoupon} className="bg-slate-800 dark:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                  Uygula
-                </button>
+                <button onClick={handleApplyCoupon} className="bg-gray-800 dark:bg-slate-600 text-white px-4 py-2 rounded-lg font-medium">Uygula</button>
               </div>
 
-              {/* Tutar Hesabı */}
               <div className="border-t pt-4 space-y-2 dark:border-slate-700 text-sm">
-                <div className="flex justify-between text-gray-500 dark:text-gray-400">
+                <div className="flex justify-between text-gray-500">
                   <span>Ara Toplam</span>
                   <span>{cartTotal} ₺</span>
                 </div>
@@ -431,31 +377,30 @@ export default function App() {
             </div>
           )}
 
-          {/* 🔄 SİPARİŞ İPTAL / İADE TALEBİ ALANI */}
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 space-y-4 shadow-sm">
-            <h3 className="font-bold text-lg dark:text-white">Sipariş Takibi & İade</h3>
+          {/* --- SİPARİŞ İPTAL / İADE TALEBİ MODÜLÜ --- */}
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 space-y-4">
+            <h3 className="font-bold text-lg">Sipariş Takibi & Talepler</h3>
             <div className="space-y-3">
               {orders.map((order) => (
                 <div key={order.id} className="flex flex-wrap items-center justify-between p-4 border rounded-xl dark:border-slate-700 gap-4">
                   <div>
-                    <span className="font-semibold dark:text-white">{order.id}</span>
+                    <span className="font-semibold">{order.id}</span>
                     <span className="text-xs text-gray-500 block">{order.date} • {order.total} ₺</span>
                   </div>
                   
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    order.status === 'Hazırlanıyor' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' :
-                    order.status === 'İptal Edildi' ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300' : 
-                    'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
+                    order.status === 'Hazırlanıyor' ? 'bg-amber-100 text-amber-800' :
+                    order.status === 'İptal Edildi' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
                   }`}>
                     {order.status}
                   </span>
 
-                  {/* Dinamik İptal / İade Butonları */}
+                  {/* Dinamik Aksiyon Butonları */}
                   <div>
                     {order.status === 'Hazırlanıyor' && (
                       <button 
                         onClick={() => handleOrderAction(order.id, 'İptal Edildi')}
-                        className="text-xs text-red-600 dark:text-red-400 hover:underline font-medium"
+                        className="text-xs text-red-600 hover:underline font-medium"
                       >
                         Siparişi İptal Et
                       </button>
@@ -463,9 +408,9 @@ export default function App() {
                     {order.status === 'Teslim Edildi' && (
                       <button 
                         onClick={() => handleOrderAction(order.id, 'İade Talebi Alındı')}
-                        className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium flex items-center gap-1"
+                        className="text-xs text-blue-600 hover:underline font-medium flex items-center gap-1"
                       >
-                        <RotateCcw size={12} /> İade Talebi Oluştur
+                        <RefreshCw size={12} /> İade Talebi Oluştur
                       </button>
                     )}
                   </div>
@@ -477,10 +422,10 @@ export default function App() {
         </section>
       </main>
 
-      {/* 📸 ÇOKLU ÜRÜN GÖRSELİ GALERİSİ (MODAL) */}
+      {/* --- 📸 ÇOKLU ÜRÜN GÖRSELİ (MODAL) --- */}
       {selectedProduct && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl max-w-2xl w-full p-6 relative space-y-4 border dark:border-slate-700">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl max-w-2xl w-full p-6 relative space-y-4">
             <button 
               onClick={() => setSelectedProduct(null)} 
               className="absolute top-4 right-4 p-2 text-gray-400 hover:text-black dark:hover:text-white"
@@ -489,9 +434,9 @@ export default function App() {
             </button>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Galeri İçi Küçük Görseller (Thumbnails) */}
+              {/* Galeri Alanı */}
               <div className="space-y-3">
-                <img src={selectedImage} alt="Ana Görsel" className="w-full h-64 object-cover rounded-xl border dark:border-slate-700" />
+                <img src={selectedImage} alt="Seçili Görsel" className="w-full h-64 object-cover rounded-xl border dark:border-slate-700" />
                 <div className="flex gap-2">
                   {selectedProduct.images.map((img, idx) => (
                     <img 
@@ -504,15 +449,15 @@ export default function App() {
                 </div>
               </div>
 
+              {/* Detay Bilgisi */}
               <div className="space-y-4 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-xl font-bold dark:text-white">{selectedProduct.title}</h2>
+                  <h2 className="text-xl font-bold">{selectedProduct.title}</h2>
                   <p className="text-2xl font-bold text-blue-600 mt-2">{selectedProduct.price} ₺</p>
-                  <p className="text-sm text-gray-500 mt-2">Marka: {selectedProduct.brand}</p>
                 </div>
                 <button 
                   onClick={() => { addToCart(selectedProduct); setSelectedProduct(null); }}
-                  className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
+                  className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700"
                 >
                   Sepete Ekle
                 </button>
@@ -522,15 +467,15 @@ export default function App() {
         </div>
       )}
 
-      {/* 🦶 DETAYLI FOOTER (ALT BİLGİ) */}
+      {/* --- 🦶 DETAYLI FOOTER --- */}
       <footer className="bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 mt-16 text-sm text-gray-600 dark:text-gray-400">
         <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h5 className="font-bold text-gray-900 dark:text-white mb-3">Müşteri Hizmetleri</h5>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:underline">Sıkça Sorulan Sorular (SSS)</a></li>
+              <li><a href="#" className="hover:underline">Sıkça Sorulan Sorular</a></li>
               <li><a href="#" className="hover:underline">Kargo ve Teslimat</a></li>
-              <li><a href="#" className="hover:underline">İade Şartları</a></li>
+              <li><a href="#" className="hover:underline">İade Koşulları</a></li>
             </ul>
           </div>
           <div>
@@ -538,15 +483,15 @@ export default function App() {
             <ul className="space-y-2">
               <li><a href="#" className="hover:underline">Hakkımızda</a></li>
               <li><a href="#" className="hover:underline">Kariyer</a></li>
-              <li><a href="#" className="hover:underline">Gizlilik ve Güvenlik</a></li>
+              <li><a href="#" className="hover:underline">Gizlilik Politikası</a></li>
             </ul>
           </div>
           <div>
-            <h5 className="font-bold text-gray-900 dark:text-white mb-3">Güvenli Ödeme Altyapısı</h5>
+            <h5 className="font-bold text-gray-900 dark:text-white mb-3">Güvenli Ödeme Logoları</h5>
             <div className="flex gap-2">
-              <span className="px-3 py-1 border dark:border-slate-600 rounded bg-gray-50 dark:bg-slate-700 font-bold text-xs dark:text-white">VISA</span>
-              <span className="px-3 py-1 border dark:border-slate-600 rounded bg-gray-50 dark:bg-slate-700 font-bold text-xs dark:text-white">MASTERCARD</span>
-              <span className="px-3 py-1 border dark:border-slate-600 rounded bg-gray-50 dark:bg-slate-700 font-bold text-xs dark:text-white">TROY</span>
+              <span className="px-3 py-1 border dark:border-slate-600 rounded bg-gray-50 dark:bg-slate-700 font-bold text-xs">VISA</span>
+              <span className="px-3 py-1 border dark:border-slate-600 rounded bg-gray-50 dark:bg-slate-700 font-bold text-xs">MASTERCARD</span>
+              <span className="px-3 py-1 border dark:border-slate-600 rounded bg-gray-50 dark:bg-slate-700 font-bold text-xs">TROY</span>
             </div>
           </div>
         </div>
