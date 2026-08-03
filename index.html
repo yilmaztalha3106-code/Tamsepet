@@ -3,84 +3,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAMSEPET | Alışverişin Tam Zamanı</title>
+    <title>TAMSEPET | Geleceğin Alışveriş Deneyimi</title>
+    <!-- FontAwesome İkon Kütüphanesi -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; padding: 0; background-color: #f4f4f9; color: #333;
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #2f3542;
+            --bg-color: #f4f4f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
         }
-        header { 
-            background-color: #ff6b6b; color: white; padding: 30px 20px; text-align: center; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+        body.dark-mode {
+            --bg-color: #1e1e2e;
+            --card-bg: #2b2b3d;
+            --text-color: #f1f1f1;
+            --secondary-color: #181825;
         }
-        header h1 { margin: 0; font-size: 3em; letter-spacing: 2px; font-weight: 800;}
-        header p { margin: 10px 0 0 0; font-size: 1.2em; opacity: 0.9;}
-        nav { background-color: #2f3542; display: flex; justify-content: center; }
-        nav a { 
-            color: white; padding: 15px 25px; text-decoration: none; 
-            font-weight: 600; transition: background 0.3s;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
         }
-        nav a:hover { background-color: #ff6b6b; }
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        .hero { 
-            text-align: center; padding: 60px 20px; background: white; 
-            border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
+
+        /* Üst Header & Navigasyon */
+        header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        .hero h2 { color: #2f3542; font-size: 2.5em; margin-bottom: 15px; }
-        .hero p { color: #747d8c; font-size: 1.2em; line-height: 1.6; max-width: 600px; margin: 0 auto; }
-        .btn { 
-            display: inline-block; padding: 15px 30px; background-color: #ff6b6b; 
-            color: white; text-decoration: none; border-radius: 30px; 
-            margin-top: 25px; font-weight: bold; font-size: 1.1em;
-            transition: transform 0.2s, background 0.3s;
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
         }
-        .btn:hover { background-color: #ff4757; transform: translateY(-3px); }
-        .features { display: flex; justify-content: space-around; margin-top: 40px; flex-wrap: wrap;}
-        .feature-box { background: white; padding: 30px; border-radius: 10px; width: 28%; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px;}
-        .feature-box h3 { color: #ff6b6b; }
-        footer { text-align: center; padding: 25px; background-color: #2f3542; color: #f1f2f6; margin-top: 50px;}
+
+        .search-bar {
+            display: flex; flex: 0.5;
+            background: white; border-radius: 20px;
+            overflow: hidden; padding: 2px 10px;
+        }
+
+        .search-bar input {
+            border: none; padding: 10px; width: 100%; outline: none; font-size: 0.9em;
+        }
+
+        .search-bar button {
+            background: transparent; border: none; color: var(--secondary-color);
+            cursor: pointer; padding: 0 10px;
+        }
+
+        .header-actions {
+            display: flex; gap: 20px; align-items: center;
+        }
+
+        .action-btn {
+            background: transparent; border: none; color: white;
+            font-size: 1.2em; cursor: pointer; position: relative;
+            transition: color 0.2s;
+        }
+
+        .action-btn:hover { color: var(--primary-color); }
+
+        .badge {
+            position: absolute; top: -8px; right: -10px;
+            background-color: var(--primary-color); color: white;
+            font-size: 0.7em; font-weight: bold; border-radius: 50%;
+            padding: 2px 6px;
+        }
+
+        /* Ana İçerik */
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+
+        .hero-banner {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white; border-radius: 15px; padding: 40px; text-align: center;
+            margin-bottom: 40px; box-shadow: 0 8px 20px rgba(255,107,107,0.3);
+        }
+
+        .hero-banner h1 { margin: 0; font-size: 2.5em; }
+
+        /* Ürün Listesi Grid */
+        .section-title { font-size: 1.5em; margin-bottom: 20px; font-weight: bold; }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s; display: flex; flex-direction: column;
+        }
+
+        .product-card:hover { transform: translateY(-5px); }
+
+        .product-img {
+            height: 180px; background-color: #ddd;
+            display: flex; align-items: center; justify-content: center;
+            color: #888; font-size: 3em;
+        }
+
+        .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-title { font-weight: bold; margin-bottom: 8px; }
+        .product-price { color: var(--primary-color); font-weight: bold; font-size: 1.2em; margin-bottom: 12px; }
+        
+        .add-cart-btn {
+            background-color: var(--primary-color); color: white; border: none;
+            padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        .add-cart-btn:hover { opacity: 0.9; }
+
+        /* Yan Sepet Çekmecesi */
+        .cart-drawer {
+            position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
+            background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            transition: right 0.3s ease; z-index: 200; padding: 20px;
+            display: flex; flex-direction: column;
+        }
+        .cart-drawer.open { right: 0; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; padding-bottom: 15px; }
+        .cart-items { flex-grow: 1; overflow-y: auto; margin-top: 15px; }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .cart-total { font-size: 1.2em; font-weight: bold; margin-top: 15px; }
+
+        /* Yapay Zeka Chat Widget */
+        .ai-widget-btn {
+            position: fixed; bottom: 20px; right: 20px;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white; border: none; width: 60px; height: 60px; border-radius: 50%;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+            font-size: 1.5em; z-index: 150; display: flex; align-items: center; justify-content: center;
+        }
+
+        .ai-chat-box {
+            position: fixed; bottom: 90px; right: 20px; width: 320px; height: 420px;
+            background-color: var(--card-bg); border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: none;
+            flex-direction: column; z-index: 150; overflow: hidden;
+        }
+
+        .ai-chat-box.active { display: flex; }
+        .ai-header { background-color: #6c5ce7; color: white; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; }
+        .ai-messages { flex-grow: 1; padding: 15px; overflow-y: auto; font-size: 0.9em; display: flex; flex-direction: column; gap: 10px; }
+        .chat-msg { padding: 8px 12px; border-radius: 8px; max-width: 80%; }
+        .bot-msg { background-color: #eee; color: #333; align-self: flex-start; }
+        .user-msg { background-color: #6c5ce7; color: white; align-self: flex-end; }
+        .ai-input-area { display: flex; border-top: 1px solid #ccc; }
+        .ai-input-area input { flex-grow: 1; border: none; padding: 10px; outline: none; }
+        .ai-input-area button { background-color: #6c5ce7; color: white; border: none; padding: 10px 15px; cursor: pointer; }
+
+        /* Modal Pencereleri (Profil & Ayarlar) */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 300;
+        }
+        .modal-content {
+            background-color: var(--card-bg); padding: 25px; border-radius: 12px; width: 90%; max-width: 400px;
+            position: relative;
+        }
+        .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.2em; }
+
+        footer { text-align: center; padding: 20px; background-color: var(--secondary-color); color: white; margin-top: 50px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>TAMSEPET</h1>
-    <p>Aradığın Her Şey Tek Sepette!</p>
-</header>
-
-<nav>
-    <a href="#">Ana Sayfa</a>
-    <a href="#">Kategoriler</a>
-    <a href="#">Fırsatlar</a>
-    <a href="#">Bize Ulaşın</a>
-</nav>
-
-<div class="container">
-    <div class="hero">
-        <h2>Hoş Geldiniz!</h2>
-        <p>En kaliteli ürünler, en uygun fiyatlarla ve güvenilir kargo seçenekleriyle kapınızda. Binlerce çeşit ürün arasından dilediğini seç, sepetini hemen doldur.</p>
-        <a href="#" class="btn">Alışverişe Başla</a>
+    <div class="logo"><i class="fa-solid fa-basket-shopping"></i> TAMSEPET</div>
+    
+    <div class="search-bar">
+        <input type="text" placeholder="Binlerce ürün arasında ara...">
+        <button><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
 
-    <div class="features">
-        <div class="feature-box">
-            <h3>Hızlı Kargo</h3>
-            <p>Siparişleriniz 24 saat içinde kargoya teslim edilir.</p>
+    <div class="header-actions">
+        <button class="action-btn" onclick="toggleModal('profileModal')"><i class="fa-regular fa-user"></i></button>
+        <button class="action-btn" onclick="toggleModal('settingsModal')"><i class="fa-solid fa-gear"></i></button>
+        <button class="action-btn" onclick="toggleCart()">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="badge" id="cartCount">0</span>
+        </button>
+    </div>
+</header>
+
+<div class="container">
+    <div class="hero-banner">
+        <h1>TAMSEPET Fırsatlar Dünyası</h1>
+        <p>Yapay zeka destekli akıllı alışveriş dönemi başladı!</p>
+    </div>
+
+    <div class="section-title">Popüler Ürünler</div>
+    <div class="products-grid">
+        <!-- Ürün 1 -->
+        <div class="product-card">
+            <div class="product-img"><i class="fa-solid fa-mobile-screen-button"></i></div>
+            <div class="product-info">
+                <div class="product-title">Akıllı Telefon Z Pro</div>
+                <div class="product-price">24.999 TL</div>
+                <button class="add-cart-btn" onclick="addToCart('Akıllı Telefon Z Pro', 24999)">Sepete Ekle</button>
+            </div>
         </div>
-        <div class="feature-box">
-            <h3>Güvenli Ödeme</h3>
-            <p>256-bit SSL sertifikası ile %100 güvenli alışveriş.</p>
+        <!-- Ürün 2 -->
+        <div class="product-card">
+            <div class="product-img"><i class="fa-solid fa-laptop"></i></div>
+            <div class="product-info">
+                <div class="product-title">UltraBook Pro 15</div>
+                <div class="product-price">38.500 TL</div>
+                <button class="add-cart-btn" onclick="addToCart('UltraBook Pro 15', 38500)">Sepete Ekle</button>
+            </div>
         </div>
-        <div class="feature-box">
-            <h3>Kolay İade</h3>
-            <p>14 gün içinde şartsız şartsız iade garantisi.</p>
+        <!-- Ürün 3 -->
+        <div class="product-card">
+            <div class="product-img"><i class="fa-solid fa-headphones"></i></div>
+            <div class="product-info">
+                <div class="product-title">Kablosuz Kulaklık</div>
+                <div class="product-price">1.499 TL</div>
+                <button class="add-cart-btn" onclick="addToCart('Kablosuz Kulaklık', 1499)">Sepete Ekle</button>
+            </div>
+        </div>
+        <!-- Ürün 4 -->
+        <div class="product-card">
+            <div class="product-img"><i class="fa-solid fa-clock"></i></div>
+            <div class="product-info">
+                <div class="product-title">Akıllı Saat V2</div>
+                <div class="product-price">3.200 TL</div>
+                <button class="add-cart-btn" onclick="addToCart('Akıllı Saat V2', 3200)">Sepete Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sepet Çekmecesi -->
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+        <h3>Sepetim</h3>
+        <i class="fa-solid fa-xmark close-modal" onclick="toggleCart()"></i>
+    </div>
+    <div class="cart-items" id="cartItems">
+        <p style="text-align: center; color: #888;">Sepetiniz henüz boş.</p>
+    </div>
+    <div class="cart-total">
+        Toplam: <span id="cartTotal">0</span> TL
+    </div>
+</div>
+
+<!-- AI Asistanı Chatbox -->
+<button class="ai-widget-btn" onclick="toggleAI()"><i class="fa-solid fa-robot"></i></button>
+<div class="ai-chat-box" id="aiChatBox">
+    <div class="ai-header">
+        <span><i class="fa-solid fa-robot"></i> TAMSEPET AI</span>
+        <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="toggleAI()"></i>
+    </div>
+    <div class="ai-messages" id="aiMessages">
+        <div class="chat-msg bot-msg">Merhaba! Ben TAMSEPET Yapay Zeka asistanıyım. Size nasıl yardımcı olabilirim?</div>
+    </div>
+    <div class="ai-input-area">
+        <input type="text" id="aiInput" placeholder="Soru sorun...">
+        <button onclick="sendAIMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<!-- Profil Modalı -->
+<div class="modal" id="profileModal">
+    <div class="modal-content">
+        <i class="fa-solid fa-xmark close-modal" onclick="toggleModal('profileModal')"></i>
+        <h2>Kullanıcı Profili</h2>
+        <p><strong>Ad Soyad:</strong> Yılmaz Talha</p>
+        <p><strong>E-posta:</strong> talha@tamsepet.com</p>
+        <p><strong>Üyelik Tipi:</strong> VIP Müşteri</p>
+    </div>
+</div>
+
+<!-- Ayarlar Modalı -->
+<div class="modal" id="settingsModal">
+    <div class="modal-content">
+        <i class="fa-solid fa-xmark close-modal" onclick="toggleModal('settingsModal')"></i>
+        <h2>Site Ayarları</h2>
+        <div style="margin-top:20px;">
+            <label style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+                <span>Karanlık Mod (Gece Teması)</span>
+                <input type="checkbox" onchange="toggleDarkMode()">
+            </label>
         </div>
     </div>
 </div>
 
 <footer>
-    &copy; 2026 TAMSEPET. Tüm Hakları Saklıdır.
+    &copy; 2026 TAMSEPET - Tüm Hakları Saklıdır.
 </footer>
+
+<script>
+    let cart = [];
+    let totalPrice = 0;
+
+    function toggleCart() {
+        document.getElementById('cartDrawer').classList.toggle('open');
+    }
+
+    function toggleAI() {
+        document.getElementById('aiChatBox').classList.toggle('active');
+    }
+
+    function toggleModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+    }
+
+    function addToCart(title, price) {
+        cart.push({title, price});
+        totalPrice += price;
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        document.getElementById('cartCount').innerText = cart.length;
+        document.getElementById('cartTotal').innerText = totalPrice.toLocaleString('tr-TR');
+        
+        const cartItemsDiv = document.getElementById('cartItems');
+        if (cart.length === 0) {
+            cartItemsDiv.innerHTML = '<p style="text-align: center; color: #888;">Sepetiniz henüz boş.</p>';
+        } else {
+            cartItemsDiv.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <span>${item.title}</span>
+                    <strong>${item.price.toLocaleString('tr-TR')} TL</strong>
+                </div>
+            `).join('');
+        }
+    }
+
+    function sendAIMessage() {
+        const input = document.getElementById('aiInput');
+        const text = input.value.trim();
+        if(!text) return;
+
+        const messagesDiv = document.getElementById('aiMessages');
+        
+        // Kullanıcı mesajı
+        messagesDiv.innerHTML += `<div class="chat-msg user-msg">${text}</div>`;
+        input.value = '';
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        // Yapay Zeka Otomatik Yanıt Simülasyonu
+        setTimeout(() => {
+            let botReply = "Anladım! TAMSEPET üzerinde aradığınız ürünleri en uygun fiyatla bulmanıza yardımcı olabilirim.";
+            if(text.toLowerCase().includes('kargo')) {
+                botReply = "Sitemizde 500 TL üzeri tüm alışverişlerde kargo tamamen ücretsizdir!";
+            } else if(text.toLowerCase().includes('indirim') || text.toLowerCase().includes('fırsat')) {
+                botReply = "Bugüne özel elektronik kategorisinde %20 indirim fırsatımız var!";
+            }
+            messagesDiv.innerHTML += `<div class="chat-msg bot-msg">${botReply}</div>`;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }, 800);
+    }
+</script>
 
 </body>
 </html>
