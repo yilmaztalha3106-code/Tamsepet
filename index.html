@@ -11,6 +11,7 @@
             --primary-color: #ff6b6b;
             --secondary-color: #2f3542;
             --success-color: #2ed573;
+            --trendyol-orange: #f27a1a;
             --bg-color: #f4f4f9;
             --card-bg: #ffffff;
             --text-color: #333333;
@@ -32,24 +33,30 @@
             color: var(--text-color);
         }
 
-        /* Keyframe Animasyonları */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Dynamic Animations */
+        @keyframes textShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes mascotFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.08); }
             100% { transform: scale(1); }
         }
 
         @keyframes modalSlide {
-            from { opacity: 0; transform: scale(0.9); }
+            from { opacity: 0; transform: scale(0.92); }
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Üst Header */
+        /* Header */
         header {
             background-color: var(--secondary-color);
             color: white; padding: 15px 5%;
@@ -59,7 +66,7 @@
         }
 
         .logo {
-            font-size: 1.8em; font-weight: 800; color: var(--primary-color);
+            font-size: 1.8em; font-weight: 900; color: var(--primary-color);
             cursor: pointer; display: flex; align-items: center; gap: 8px;
         }
 
@@ -77,7 +84,6 @@
             font-size: 1.2em; cursor: pointer; position: relative;
             display: flex; align-items: center; gap: 5px;
         }
-
         .action-btn:hover { color: var(--primary-color); }
 
         .badge {
@@ -86,17 +92,45 @@
             font-size: 0.7em; font-weight: bold; border-radius: 50%;
             padding: 2px 6px;
         }
-        .badge.pulse-anim { animation: pulse 1s infinite; }
 
-        /* Banner & Ana Ekran */
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; animation: fadeIn 0.6s ease; }
-
+        /* Animated Title Banner */
         .hero-banner {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            background: linear-gradient(135deg, #1e1e2e, #2f3542);
             color: white; border-radius: 15px; padding: 35px; text-align: center;
-            margin-bottom: 30px; box-shadow: 0 8px 20px rgba(255,107,107,0.3);
+            margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            position: relative; overflow: hidden;
         }
-        .hero-banner h1 { margin: 0; font-size: 2.3em; }
+
+        .animated-title {
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #ff9ff3, #54a0ff, #ff6b6b);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShimmer 4s ease infinite;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+        }
+
+        /* Mascot Styling */
+        .mascot-box {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.1); padding: 8px 18px; border-radius: 25px;
+            backdrop-filter: blur(5px); margin-top: 10px;
+        }
+        .mascot-avatar {
+            font-size: 2em; animation: mascotFloat 2.5s ease-in-out infinite; display: inline-block;
+        }
+
+        /* Flash Sales Bar (Trendyol Style) */
+        .flash-sale-bar {
+            background: linear-gradient(90deg, #ff4757, #ff6b6b);
+            color: white; padding: 12px 20px; border-radius: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 25px; font-weight: bold; flex-wrap: wrap; gap: 10px;
+        }
+        .timer-badge { background: white; color: #ff4757; padding: 4px 10px; border-radius: 6px; font-family: monospace; font-size: 1.1em; }
 
         .controls-bar {
             display: flex; justify-content: space-between; align-items: center;
@@ -110,19 +144,17 @@
             box-shadow: 0 4px 10px rgba(46, 213, 115, 0.3);
             transition: transform 0.2s, background 0.3s;
         }
-        .btn-main:hover { transform: translateY(-2px); opacity: 0.95; }
+        .btn-main:hover { transform: translateY(-2px); }
 
         .btn-track {
             background-color: #70a1ff; color: white; border: none;
             padding: 12px 22px; border-radius: 25px; font-weight: bold;
             cursor: pointer; display: flex; align-items: center; gap: 8px;
-            transition: transform 0.2s;
         }
-        .btn-track:hover { transform: translateY(-2px); }
 
-        /* Ürün Kartları Grid */
+        /* Product Cards & Badges */
         .products-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
             gap: 25px;
         }
 
@@ -130,45 +162,59 @@
             background-color: var(--card-bg); border-radius: 14px;
             overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
             transition: transform 0.3s, box-shadow 0.3s; position: relative;
-            display: flex; flex-direction: column; animation: fadeIn 0.5s ease;
+            display: flex; flex-direction: column;
         }
         .product-card:hover { transform: translateY(-7px); box-shadow: 0 10px 25px rgba(0,0,0,0.12); }
 
-        .seller-tag {
-            position: absolute; top: 12px; left: 12px;
-            background: rgba(47, 53, 66, 0.85); color: white;
-            padding: 4px 10px; border-radius: 12px; font-size: 0.75em;
-            backdrop-filter: blur(4px); z-index: 5; font-weight: bold;
+        .badge-container {
+            position: absolute; top: 10px; left: 10px; z-index: 5;
+            display: flex; flex-direction: column; gap: 5px;
         }
 
+        .badge-tag {
+            font-size: 0.7em; font-weight: bold; padding: 4px 8px; border-radius: 5px; color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .bg-cargo { background: #2f3542; }
+        .bg-bestseller { background: #f27a1a; }
+        .bg-bestprice { background: #2ed573; }
+
         .fav-btn {
-            position: absolute; top: 12px; right: 12px;
+            position: absolute; top: 10px; right: 10px;
             background: rgba(255,255,255,0.9); border: none;
-            width: 35px; height: 35px; border-radius: 50%;
-            cursor: pointer; color: #ccc; font-size: 1.1em;
+            width: 36px; height: 36px; border-radius: 50%;
+            cursor: pointer; color: #ccc; font-size: 1.2em;
             display: flex; align-items: center; justify-content: center;
             transition: color 0.2s, transform 0.2s; z-index: 5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
-        .fav-btn.active { color: #ff4757; }
+        .fav-btn.active { color: #ff4757; transform: scale(1.1); }
         .fav-btn:hover { transform: scale(1.15); }
 
         .product-img {
-            height: 200px; width: 100%; object-fit: cover; cursor: pointer;
+            height: 220px; width: 100%; object-fit: cover; cursor: pointer;
         }
 
         .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .product-title { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; cursor: pointer; }
-        .product-desc { font-size: 0.85em; color: #777; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .product-price { color: var(--primary-color); font-weight: 800; font-size: 1.3em; margin-bottom: 12px; }
+        .product-title { font-weight: bold; font-size: 1.05em; margin-bottom: 5px; cursor: pointer; height: 42px; overflow: hidden; }
+        
+        .rating-row { display: flex; align-items: center; gap: 5px; font-size: 0.8em; color: #f1c40f; margin-bottom: 8px; }
+        .rating-count { color: #888; font-size: 0.9em; }
+
+        .social-proof { background: #fff4e6; color: #d97706; padding: 4px 8px; border-radius: 6px; font-size: 0.75em; font-weight: bold; margin-bottom: 10px; display: inline-block; }
+
+        .product-price-box { margin-bottom: 12px; }
+        .old-price { text-decoration: line-through; color: #aaa; font-size: 0.85em; }
+        .current-price { color: var(--trendyol-orange); font-weight: 900; font-size: 1.3em; }
 
         .add-cart-btn {
-            background-color: var(--primary-color); color: white; border: none;
+            background-color: var(--trendyol-orange); color: white; border: none;
             padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold;
             width: 100%; transition: background 0.2s;
         }
-        .add-cart-btn:hover { background-color: #ff4757; }
+        .add-cart-btn:hover { background-color: #e0680a; }
 
-        /* Modallar & Çekmece */
+        /* Cart Drawer & Modals */
         .cart-drawer {
             position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
             background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.2);
@@ -177,7 +223,6 @@
         .cart-drawer.open { right: 0; }
         .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 15px; }
         .cart-items { flex-grow: 1; overflow-y: auto; margin-top: 15px; }
-        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -186,51 +231,58 @@
         }
         .modal-content {
             background-color: var(--card-bg); padding: 25px; border-radius: 14px;
-            width: 90%; max-width: 500px; position: relative; max-height: 85vh; overflow-y: auto;
+            width: 90%; max-width: 480px; position: relative; max-height: 85vh; overflow-y: auto;
             animation: modalSlide 0.3s ease;
         }
         .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.3em; }
 
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; }
-        .form-group input, .form-group textarea, .form-group select {
+        /* Auth Form Styling */
+        .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; }
+        .auth-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; font-weight: bold; color: #888; }
+        .auth-tab.active { color: var(--primary-color); border-bottom: 3px solid var(--primary-color); }
+
+        .btn-google {
+            width: 100%; background: #ffffff; color: #333; border: 1px solid #ccc;
+            padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .btn-google:hover { background: #f8f9fa; }
+
+        .divider { text-align: center; margin: 15px 0; color: #aaa; font-size: 0.85em; position: relative; }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 0.85em; }
+        .form-group input, .form-group textarea {
             width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 0.9em; outline: none;
         }
-        .form-group input:focus, .form-group textarea:focus { border-color: var(--primary-color); }
 
-        /* Kargo Çizelgesi Animasyonu */
+        /* Timeline for Cargo */
         .timeline { list-style-type: none; padding: 0; position: relative; margin-top: 20px; }
-        .timeline::before {
-            content: ''; position: absolute; top: 0; bottom: 0; left: 20px; width: 4px; background: #ddd;
-        }
+        .timeline::before { content: ''; position: absolute; top: 0; bottom: 0; left: 20px; width: 4px; background: #ddd; }
         .timeline-item { margin-bottom: 25px; padding-left: 45px; position: relative; }
-        .timeline-icon {
-            position: absolute; left: 8px; top: 0; width: 28px; height: 28px;
-            border-radius: 50%; background: #ccc; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8em;
-        }
+        .timeline-icon { position: absolute; left: 8px; top: 0; width: 28px; height: 28px; border-radius: 50%; background: #ccc; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8em; }
         .timeline-item.completed .timeline-icon { background: var(--success-color); }
         .timeline-item.active .timeline-icon { background: var(--primary-color); animation: pulse 1.5s infinite; }
-        .timeline-title { font-weight: bold; margin-bottom: 3px; }
-        .timeline-date { font-size: 0.75em; color: #888; }
 
-        /* AI Asistan */
+        /* AI Mascot Bot */
         .ai-widget-btn {
             position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-            color: white; border: none; width: 60px; height: 60px; border-radius: 50%;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4); font-size: 1.5em; z-index: 150;
-            animation: pulse 2s infinite;
+            color: white; border: none; width: 65px; height: 65px; border-radius: 50%;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4); font-size: 1.8em; z-index: 150;
+            display: flex; align-items: center; justify-content: center;
         }
         .ai-chat-box {
-            position: fixed; bottom: 90px; right: 20px; width: 330px; height: 430px;
+            position: fixed; bottom: 95px; right: 20px; width: 340px; height: 440px;
             background-color: var(--card-bg); border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.25);
             display: none; flex-direction: column; z-index: 150; overflow: hidden; animation: modalSlide 0.3s ease;
         }
         .ai-chat-box.active { display: flex; }
-        .ai-header { background-color: #6c5ce7; color: white; padding: 14px; font-weight: bold; display: flex; justify-content: space-between; }
+        .ai-header { background-color: #6c5ce7; color: white; padding: 14px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
         .ai-messages { flex-grow: 1; padding: 15px; overflow-y: auto; font-size: 0.9em; display: flex; flex-direction: column; gap: 10px; }
         .chat-msg { padding: 9px 13px; border-radius: 10px; max-width: 82%; font-size: 0.9em; line-height: 1.4; }
-        .bot-msg { background-color: #f1f2f6; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }
-        .user-msg { background-color: #6c5ce7; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .bot-msg { background-color: #f1f2f6; color: #333; align-self: flex-start; }
+        .user-msg { background-color: #6c5ce7; color: white; align-self: flex-end; }
         .ai-input-area { display: flex; border-top: 1px solid #ccc; }
         .ai-input-area input { flex-grow: 1; border: none; padding: 12px; outline: none; }
         .ai-input-area button { background-color: #6c5ce7; color: white; border: none; padding: 0 15px; cursor: pointer; }
@@ -241,10 +293,12 @@
 <body>
 
 <header>
-    <div class="logo"><i class="fa-solid fa-basket-shopping"></i> TAMSEPET</div>
+    <div class="logo">
+        <span class="mascot-avatar" style="font-size:1em;">🧺</span> TAMSEPET
+    </div>
     
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Ürün veya satıcı ara..." onkeyup="filterProducts()">
+        <input type="text" id="searchInput" placeholder="Ürün, marka veya satıcı ara..." onkeyup="filterProducts()">
         <button><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
 
@@ -261,30 +315,40 @@
             <i class="fa-solid fa-cart-shopping"></i>
             <span class="badge" id="cartCount">0</span>
         </button>
-        <button class="action-btn" onclick="toggleModal('loginModal')">
-            <i class="fa-regular fa-user"></i> <span id="loginBtnText">Giriş</span>
+        <button class="action-btn" onclick="toggleModal('authModal')">
+            <i class="fa-regular fa-user"></i> <span id="loginBtnText">Giriş / Kayıt</span>
         </button>
         <button class="action-btn" onclick="toggleModal('settingsModal')"><i class="fa-solid fa-gear"></i></button>
     </div>
 </header>
 
-<div class="container">
+<div class="container" style="max-width: 1200px; margin: 25px auto; padding: 0 20px;">
+    
+    <!-- Animasyonlu Başlık Banner -->
     <div class="hero-banner">
-        <h1>TAMSEPET Pazar Yeri</h1>
-        <p>İster kendi ürününü ilana koy sat, ister binlerce ürünü güvenle satın al!</p>
+        <h1 class="animated-title">TAM SEPET PAZAR YERİ</h1>
+        <div class="mascot-box">
+            <span class="mascot-avatar">🧺🤖</span>
+            <span>Merhaba! Ben <strong>SEPO</strong>, Tamsepet'in resmi maskotuyum! Alışverişe hazır mısın?</span>
+        </div>
+    </div>
+
+    <!-- Flaş İndirim Sayacı (Trendyol Stili) -->
+    <div class="flash-sale-bar">
+        <div><i class="fa-solid fa-bolt"></i> <strong>Flaş Ürünler</strong> — Hemen Al, Fırsatı Kaçırma!</div>
+        <div>Kapanışa Kalan Süre: <span class="timer-badge" id="flashTimer">04:27:50</span></div>
     </div>
 
     <div class="controls-bar">
         <button class="btn-main" onclick="toggleModal('addProductModal')">
-            <i class="fa-solid fa-plus"></i> Ürününü Sat (İlan Ver)
+            <i class="fa-solid fa-plus"></i> Ürününü Sat (İlan Verme)
         </button>
-
         <button class="btn-track" onclick="toggleModal('trackModal')">
             <i class="fa-solid fa-truck-fast"></i> Kargo Takibi Yap
         </button>
     </div>
 
-    <!-- Ürün Listesi Grid -->
+    <!-- Ürün Grid -->
     <div class="products-grid" id="productsGrid"></div>
 </div>
 
@@ -296,30 +360,30 @@
     </div>
     <div class="cart-items" id="cartItems"></div>
     <div style="font-size: 1.2em; font-weight: bold; margin-top: 15px; text-align: right;">
-        Toplam: <span id="cartTotal">0</span> TL
+        Toplam: <span id="cartTotal" style="color:var(--trendyol-orange);">0</span> TL
     </div>
-    <button class="btn-main" style="width:100%; margin-top: 15px; justify-content: center;" onclick="checkoutCart()">
+    <button class="btn-main" style="width:100%; margin-top: 15px; justify-content: center; background:var(--trendyol-orange);" onclick="checkoutCart()">
         Siparişi Tamamla & Satın Al
     </button>
 </div>
 
-<!-- AI Yapay Zeka Widget -->
-<button class="ai-widget-btn" onclick="toggleAI()"><i class="fa-solid fa-robot"></i></button>
+<!-- AI Maskot Chat Widget -->
+<button class="ai-widget-btn" onclick="toggleAI()"><span class="mascot-avatar">🧺</span></button>
 <div class="ai-chat-box" id="aiChatBox">
     <div class="ai-header">
-        <span><i class="fa-solid fa-robot"></i> TAMSEPET Akıllı AI</span>
+        <span><span class="mascot-avatar">🧺</span> SEPO AI Asistan</span>
         <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="toggleAI()"></i>
     </div>
     <div class="ai-messages" id="aiMessages">
-        <div class="chat-msg bot-msg">Merhaba! Ben TAMSEPET yapay zekası. Ürün satma, kargo takibi veya ilanlar hakkında soru sorabilirsiniz!</div>
+        <div class="chat-msg bot-msg">Selam! Ben <strong>SEPO</strong> 🧺. İster ürün sat, ister Trendyol fırsatları yakala, buradayım!</div>
     </div>
     <div class="ai-input-area">
-        <input type="text" id="aiInput" placeholder="Mesajınızı yazın..." onkeypress="if(event.key==='Enter') sendAIMessage()">
+        <input type="text" id="aiInput" placeholder="SEPO'ya soru sor..." onkeypress="if(event.key==='Enter') sendAIMessage()">
         <button onclick="sendAIMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
 
-<!-- Modal 1: Satıcı Ürün Ekleme (İlan Verme) -->
+<!-- Modal 1: İlan Verme -->
 <div class="modal" id="addProductModal">
     <div class="modal-content">
         <i class="fa-solid fa-xmark close-modal" onclick="toggleModal('addProductModal')"></i>
@@ -327,15 +391,15 @@
         <form onsubmit="addNewProduct(event)">
             <div class="form-group">
                 <label>Satıcı Adı / Mağaza</label>
-                <input type="text" id="newSeller" required placeholder="Örn: Ahmet Yılmaz">
+                <input type="text" id="newSeller" required placeholder="Örn: Ahmet Teknoloji">
             </div>
             <div class="form-group">
                 <label>Ürün Başlığı</label>
-                <input type="text" id="newTitle" required placeholder="Örn: Temiz Kullanılmış iPhone 13">
+                <input type="text" id="newTitle" required placeholder="Örn: Döküm Granit 3'lü Sahan Seti">
             </div>
             <div class="form-group">
                 <label>Fiyat (TL)</label>
-                <input type="number" id="newPrice" required placeholder="Örn: 24500">
+                <input type="number" id="newPrice" required placeholder="Örn: 383">
             </div>
             <div class="form-group">
                 <label>Görsel URL Bağlantısı</label>
@@ -343,14 +407,14 @@
             </div>
             <div class="form-group">
                 <label>Ürün Açıklaması</label>
-                <textarea id="newDesc" rows="3" placeholder="Ürünün durumu, özellikleri vb."></textarea>
+                <textarea id="newDesc" rows="3" placeholder="Ürün detayları..."></textarea>
             </div>
-            <button type="submit" class="btn-main" style="width: 100%; justify-content: center;">İlanı Yayınla</button>
+            <button type="submit" class="btn-main" style="width: 100%; justify-content: center; background:var(--trendyol-orange);">İlanı Yayınla</button>
         </form>
     </div>
 </div>
 
-<!-- Modal 2: Kargo Takip Sorgulama -->
+<!-- Modal 2: Kargo Takip -->
 <div class="modal" id="trackModal">
     <div class="modal-content">
         <i class="fa-solid fa-xmark close-modal" onclick="toggleModal('trackModal')"></i>
@@ -366,16 +430,70 @@
     </div>
 </div>
 
-<!-- Modal 3: Bildirimler Kutusu -->
+<!-- Modal 3: Giriş Yap / Kaydol (Google İle Giriş Dahil) -->
+<div class="modal" id="authModal">
+    <div class="modal-content">
+        <i class="fa-solid fa-xmark close-modal" onclick="toggleModal('authModal')"></i>
+        
+        <div class="auth-tabs">
+            <div class="auth-tab active" id="tabLoginBtn" onclick="switchAuthTab('login')">Giriş Yap</div>
+            <div class="auth-tab" id="tabRegisterBtn" onclick="switchAuthTab('register')">Kayıt Ol</div>
+        </div>
+
+        <!-- Google Girişi -->
+        <button class="btn-google" onclick="handleGoogleLogin()">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.28v3.09C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.32c-.25-.72-.38-1.49-.38-2.32s.13-1.6.38-2.32V6.59H1.28C.46 8.22 0 10.05 0 12s.46 3.78 1.28 5.41l4-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.28 6.59l4 3.09c.95-2.83 3.6-4.93 6.72-4.93z"/></svg>
+            Google ile Devam Et
+        </button>
+
+        <div class="divider">VEYA</div>
+
+        <!-- Giriş Formu -->
+        <form id="loginForm" onsubmit="handleAuthSubmit(event, 'login')">
+            <div class="form-group">
+                <label>E-Posta / Gmail</label>
+                <input type="email" required placeholder="ornek@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Şifre</label>
+                <input type="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-main" style="width:100%; justify-content:center; background:var(--primary-color);">Giriş Yap</button>
+        </form>
+
+        <!-- Kayıt Ol Formu -->
+        <form id="registerForm" style="display:none;" onsubmit="handleAuthSubmit(event, 'register')">
+            <div class="form-group">
+                <label>Ad Soyad</label>
+                <input type="text" id="regName" required placeholder="Ahmet Yılmaz">
+            </div>
+            <div class="form-group">
+                <label>Gmail / E-Posta Adresi</label>
+                <input type="email" id="regEmail" required placeholder="ahmet@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Telefon Numarası</label>
+                <input type="tel" required placeholder="0555 123 45 67">
+            </div>
+            <div class="form-group">
+                <label>Şifre Oluştur</label>
+                <input type="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-main" style="width:100%; justify-content:center; background:var(--success-color);">Kayıt Ol ve Başla</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal 4: Bildirimler -->
 <div class="modal" id="notifModal">
     <div class="modal-content">
         <i class="fa-solid fa-xmark close-modal" onclick="toggleModal('notifModal')"></i>
-        <h2><i class="fa-regular fa-bell" style="color:var(--primary-color);"></i> Bildirimleriniz</h2>
+        <h2><i class="fa-regular fa-bell" style="color:var(--primary-color);"></i> Bildirimler</h2>
         <div id="notifListContainer" style="margin-top: 15px;"></div>
     </div>
 </div>
 
-<!-- Modal 4: Ürün Detayı & Satın Al -->
+<!-- Modal 5: Ürün Detayı (Fotoğraftaki Trendyol Görünümü) -->
 <div class="modal" id="productDetailModal">
     <div class="modal-content">
         <i class="fa-solid fa-xmark close-modal" onclick="toggleModal('productDetailModal')"></i>
@@ -383,27 +501,12 @@
     </div>
 </div>
 
-<!-- Modal 5: Favoriler -->
+<!-- Modal 6: Favoriler -->
 <div class="modal" id="favModal">
     <div class="modal-content">
         <i class="fa-solid fa-xmark close-modal" onclick="toggleModal('favModal')"></i>
         <h2>Favorilerim</h2>
         <div id="favItemsList" style="margin-top: 15px;"></div>
-    </div>
-</div>
-
-<!-- Modal 6: Giriş -->
-<div class="modal" id="loginModal">
-    <div class="modal-content">
-        <i class="fa-solid fa-xmark close-modal" onclick="toggleModal('loginModal')"></i>
-        <h2>Giriş Yap</h2>
-        <form onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label>E-Posta</label>
-                <input type="email" id="loginEmail" required placeholder="kullanici@tamsepet.com">
-            </div>
-            <button type="submit" class="btn-main" style="width: 100%; justify-content: center;">Giriş Yap</button>
-        </form>
     </div>
 </div>
 
@@ -420,49 +523,94 @@
 </div>
 
 <footer>
-    &copy; 2026 TAMSEPET Pazar Yeri - Tüm Hakları Saklıdır.
+    &copy; 2026 TAM SEPET PAZAR YERİ - SEPO Maskotu İle Güvenli Alışveriş
 </footer>
 
 <script>
-    // Örnek Ürün Listesi (Satıcılı)
+    // Örnek Ürün Listesi (Fotoğraftaki Trendyol Rozetleriyle)
     let products = [
         {
-            id: 101,
+            id: 1,
+            seller: "ESIVITALIA Resmi Satıcı",
+            title: "Döküm Granit 3'lü Sahan Seti 18-20-22 Cm Siyah",
+            price: 383.59,
+            oldPrice: 395.45,
+            rating: "4.1",
+            reviews: "11619",
+            socialProof: "🔥 3,9B kişinin sepetinde, tükenmeden al!",
+            image: "https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=600",
+            desc: "2 ADET Silikon Tutacak Hediyeli! Kutulu Gönderim, Yapışmaz granit kaplama taban.",
+            badges: ["KARGO BEDAVA", "EN ÇOK SATAN", "İYİ FİYAT"]
+        },
+        {
+            id: 2,
             seller: "Ahmet Teknoloji",
-            title: "PlayStation 5 Slim 1TB",
+            title: "PlayStation 5 Slim 1TB Digital Edition",
             price: 21999,
-            image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=500",
-            desc: "Sıfır ayarında, kutulu garantili cihaz. Yanında 2. kol hediye verilecektir."
+            oldPrice: 24999,
+            rating: "4.9",
+            reviews: "3420",
+            socialProof: "⚡ Son 5 ürün kaldı!",
+            image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600",
+            desc: "Sıfır ayarında, 2 yıl ithalatçı garantili.",
+            badges: ["KARGO BEDAVA", "İYİ FİYAT"]
         },
         {
-            id: 102,
+            id: 3,
             seller: "Gamze Y.",
-            title: "Canon EOS M50 Kamera",
+            title: "Canon EOS M50 Mark II Vlog Kamerası",
             price: 14500,
-            image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500",
-            desc: "Vlog çekimleri için az kullanılmış, lensi çiziksiz temiz fotoğraf makinesi."
-        },
-        {
-            id: 103,
-            seller: "Mehmet K.",
-            title: "Apple iPad Air 5. Nesil",
-            price: 18400,
-            image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500",
-            desc: "M1 işlemcili kılıfı ve kalemiyle birlikte gönderilecektir."
+            oldPrice: 16000,
+            rating: "4.8",
+            reviews: "890",
+            socialProof: "🛒 1,2B kişi inceliyor!",
+            image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600",
+            desc: "4K video çekim imkanı, temiz kullanılmış.",
+            badges: ["EN ÇOK SATAN"]
         }
     ];
 
     let cart = [];
     let favorites = [];
-    let notifications = [
-        "Sisteme Hoş Geldiniz! İster ilan açın ürün satın, ister alışveriş yapın."
-    ];
-    let cargoOrders = {}; // Kargo Takip Verileri
+    let notifications = ["SEPO'dan Selam! Sitemize hoş geldiniz."];
+    let cargoOrders = {};
 
     window.onload = function() {
         renderProducts(products);
         renderNotifications();
+        startFlashTimer();
     };
+
+    // Favorilere Ekleme Ses Efekti (Web Audio API)
+    function playFavSound() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.15);
+        } catch(e) { console.log(e); }
+    }
+
+    // Flaş İndirim Sayacı
+    function startFlashTimer() {
+        let seconds = 16070;
+        setInterval(() => {
+            seconds--;
+            let h = Math.floor(seconds / 3600);
+            let m = Math.floor((seconds % 3600) / 60);
+            let s = seconds % 60;
+            document.getElementById('flashTimer').innerText = 
+                `${h<10?'0'+h:h}:${m<10?'0'+m:m}:${s<10?'0'+s:s}`;
+        }, 1000);
+    }
 
     function renderProducts(items) {
         const grid = document.getElementById('productsGrid');
@@ -470,32 +618,55 @@
             const isFav = favorites.includes(p.id);
             return `
                 <div class="product-card">
-                    <span class="seller-tag"><i class="fa-solid fa-user-tag"></i> ${p.seller}</span>
+                    <div class="badge-container">
+                        ${p.badges.includes("KARGO BEDAVA") ? '<span class="badge-tag bg-cargo">KARGO BEDAVA</span>' : ''}
+                        ${p.badges.includes("EN ÇOK SATAN") ? '<span class="badge-tag bg-bestseller">EN ÇOK SATAN</span>' : ''}
+                        ${p.badges.includes("İYİ FİYAT") ? '<span class="badge-tag bg-bestprice">İYİ FİYAT</span>' : ''}
+                    </div>
+
                     <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(${p.id})">
                         <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
                     </button>
-                    <img src="${p.image}" class="product-img" onclick="openDetail(${p.id})" alt="${p.title}">
+
+                    <img src="${p.image}" class="product-img" onclick="openDetail(${p.id})">
+                    
                     <div class="product-info">
                         <div>
                             <div class="product-title" onclick="openDetail(${p.id})">${p.title}</div>
-                            <div class="product-desc">${p.desc}</div>
+                            
+                            <div class="rating-row">
+                                <span>★ ${p.rating}</span>
+                                <span class="rating-count">(${p.reviews})</span>
+                            </div>
+
+                            <div class="social-proof">${p.socialProof}</div>
                         </div>
-                        <div class="product-price">${p.price.toLocaleString('tr-TR')} TL</div>
-                        <button class="add-cart-btn" onclick="addToCart(${p.id})">Sepete Ekle</button>
+
+                        <div>
+                            <div class="product-price-box">
+                                ${p.oldPrice ? `<div class="old-price">${p.oldPrice} TL</div>` : ''}
+                                <div class="current-price">${p.price.toLocaleString('tr-TR')} TL</div>
+                            </div>
+                            <button class="add-cart-btn" onclick="addToCart(${p.id})">Sepete Ekle</button>
+                        </div>
                     </div>
                 </div>
             `;
         }).join('');
     }
 
-    // Arama
-    function filterProducts() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = products.filter(p => p.title.toLowerCase().includes(query) || p.seller.toLowerCase().includes(query));
-        renderProducts(filtered);
+    function toggleFav(id) {
+        if(favorites.includes(id)) {
+            favorites = favorites.filter(f => f !== id);
+        } else {
+            favorites.push(id);
+            playFavSound(); // Ses Çal!
+        }
+        document.getElementById('favCount').innerText = favorites.length;
+        renderProducts(products);
     }
 
-    // İlan Ekleme (Satıcı)
+    // İlan Ekleme
     function addNewProduct(e) {
         e.preventDefault();
         const seller = document.getElementById('newSeller').value;
@@ -504,142 +675,89 @@
         const image = document.getElementById('newImage').value;
         const desc = document.getElementById('newDesc').value;
 
-        const newProd = { id: Date.now(), seller, title, price, image, desc };
+        const newProd = {
+            id: Date.now(), seller, title, price, image, desc,
+            rating: "5.0", reviews: "1", socialProof: "🔥 Yeni Eklenen Ürün!",
+            badges: ["KARGO BEDAVA", "İYİ FİYAT"]
+        };
         products.unshift(newProd);
         renderProducts(products);
         toggleModal('addProductModal');
-        
-        // Satıcıya Bildirim Düşür
-        addNotification(`Tebrikler ${seller}! "${title}" ürünü için ilanınız yayına alındı.`);
-        alert("İlanınız başarıyla eklendi ve mağazada yayınlandı!");
+        alert("Tebrikler! İlanınız başarıyla yayınlandı.");
     }
 
-    // Sepet & Sipariş & Bildirim Mantığı
-    function addToCart(id) {
-        const p = products.find(item => item.id === id);
-        cart.push(p);
-        updateCartUI();
-    }
+    // Auth (Giriş / Kaydol) Tab Değiştirme
+    function switchAuthTab(tab) {
+        const loginForm = document.getElementById('loginForm');
+        const regForm = document.getElementById('registerForm');
+        const tabLogin = document.getElementById('tabLoginBtn');
+        const tabReg = document.getElementById('tabRegisterBtn');
 
-    function updateCartUI() {
-        document.getElementById('cartCount').innerText = cart.length;
-        const total = cart.reduce((sum, item) => sum + item.price, 0);
-        document.getElementById('cartTotal').innerText = total.toLocaleString('tr-TR');
-        const itemsDiv = document.getElementById('cartItems');
-        if(cart.length === 0) {
-            itemsDiv.innerHTML = '<p style="color:#888;">Sepet boş.</p>';
+        if(tab === 'login') {
+            loginForm.style.display = 'block';
+            regForm.style.display = 'none';
+            tabLogin.classList.add('active');
+            tabReg.classList.remove('active');
         } else {
-            itemsDiv.innerHTML = cart.map(item => `
-                <div class="cart-item">
-                    <span>${item.title}</span>
-                    <strong>${item.price.toLocaleString('tr-TR')} TL</strong>
-                </div>
-            `).join('');
+            loginForm.style.display = 'none';
+            regForm.style.display = 'block';
+            tabReg.classList.add('active');
+            tabLogin.classList.remove('active');
         }
     }
 
-    function checkoutCart() {
-        if(cart.length === 0) return alert("Sepetiniz boş!");
-        
-        // Kargo Kodu Üret
-        const trackCode = 'TS-' + Math.floor(100000 + Math.random() * 900000);
-        
-        // Satıcılara Otomatik Bildirim Gönder (C2C Mantığı)
-        cart.forEach(item => {
-            addNotification(`🎉 Satış Bildirimi! "${item.seller}" kullanıcısının "${item.title}" ürünü satıldı. Kargo Kodu: ${trackCode}`);
-        });
-
-        // Kargo Çizelgesi Oluştur
-        cargoOrders[trackCode] = {
-            code: trackCode,
-            items: cart.map(i => i.title).join(', '),
-            statusStep: 2
-        };
-
-        alert(`Siparişiniz Alındı!\nKargo Takip Kodunuz: ${trackCode}\n(Satıcılara kargolama bildirimi iletildi).`);
-
-        cart = [];
-        updateCartUI();
-        toggleCart();
-        
-        // Otomatik Kargo Sorgulama Ekranını Aç
-        document.getElementById('trackCodeInput').value = trackCode;
-        toggleModal('trackModal');
-        searchCargo();
+    function handleGoogleLogin() {
+        document.getElementById('loginBtnText').innerText = "Google Kullanıcısı";
+        toggleModal('authModal');
+        alert("Google hesabınızla başarıyla giriş yapıldı!");
     }
 
-    // Kargo Takip Sorgusu ve Çizelgesi
-    function searchCargo() {
-        const code = document.getElementById('trackCodeInput').value.trim();
-        const display = document.getElementById('cargoResultDisplay');
-        
-        if(!code || !cargoOrders[code]) {
-            display.innerHTML = '<p style="color:#ff4757; margin-top:15px;">Geçersiz veya bulunamayan kargo takip kodu!</p>';
-            return;
-        }
-
-        display.innerHTML = `
-            <div style="margin-top:20px; background:#f8f9fa; padding:15px; border-radius:10px; color:#333;">
-                <strong>Sipariş Ürünleri:</strong> ${cargoOrders[code].items}<br>
-                <strong>Takip Kodu:</strong> ${code}
-            </div>
-            <ul class="timeline">
-                <li class="timeline-item completed">
-                    <div class="timeline-icon"><i class="fa-solid fa-check"></i></div>
-                    <div class="timeline-title">Sipariş Verildi</div>
-                    <div class="timeline-date">Ödeme onaylandı</div>
-                </li>
-                <li class="timeline-item active">
-                    <div class="timeline-icon"><i class="fa-solid fa-box"></i></div>
-                    <div class="timeline-title">Satıcıya Bildirim Gönderildi</div>
-                    <div class="timeline-date">Satıcı ürünü kargoya hazırlıyor</div>
-                </li>
-                <li class="timeline-item">
-                    <div class="timeline-icon"><i class="fa-solid fa-truck"></i></div>
-                    <div class="timeline-title">Kargoda</div>
-                    <div class="timeline-date">Aras / Yürüyen Kargo şubesinde</div>
-                </li>
-                <li class="timeline-item">
-                    <div class="timeline-icon"><i class="fa-solid fa-house"></i></div>
-                    <div class="timeline-title">Teslim Edildi</div>
-                    <div class="timeline-date">Alıcıya ulaşınca tamamlanacak</div>
-                </li>
-            </ul>
-        `;
+    function handleAuthSubmit(e, type) {
+        e.preventDefault();
+        let name = type === 'register' ? document.getElementById('regName').value : "Kullanıcı";
+        document.getElementById('loginBtnText').innerText = name.split(' ')[0];
+        toggleModal('authModal');
+        alert(type === 'register' ? "Kayıt Başarılı! Hoş geldiniz." : "Giriş Yapıldı!");
     }
 
-    // Bildirim Sistemi
-    function addNotification(msg) {
-        notifications.unshift(msg);
-        renderNotifications();
-    }
-
-    function renderNotifications() {
-        document.getElementById('notifCount').innerText = notifications.length;
-        const container = document.getElementById('notifListContainer');
-        container.innerHTML = notifications.map(n => `
-            <div style="padding:10px; border-bottom:1px solid #eee; font-size:0.9em; display:flex; gap:10px; align-items:center;">
-                <i class="fa-solid fa-bell" style="color:var(--primary-color);"></i>
-                <div>${n}</div>
-            </div>
-        `).join('');
-    }
-
-    // Detay Modalı
+    // Detay Modalı (Trendyol Tasarımı)
     function openDetail(id) {
         const p = products.find(i => i.id === id);
         document.getElementById('detailContent').innerHTML = `
             <img src="${p.image}" style="width:100%; height:250px; object-fit:cover; border-radius:10px;">
-            <h2 style="margin-top:15px;">${p.title}</h2>
+            <h2 style="margin-top:15px; font-size:1.2em;">${p.title}</h2>
+            <div style="color:var(--trendyol-orange); font-weight:bold; margin-bottom:10px;">
+                ★ ${p.rating} (${p.reviews} Değerlendirme)
+            </div>
             <p><strong>Satıcı:</strong> ${p.seller}</p>
-            <p>${p.desc}</p>
-            <div style="font-size:1.5em; font-weight:bold; color:var(--primary-color);">${p.price.toLocaleString('tr-TR')} TL</div>
-            <button class="btn-main" style="width:100%; margin-top:15px; justify-content:center;" onclick="addToCart(${p.id}); toggleModal('productDetailModal');">Sepete Ekle</button>
+            <p style="color:#666;">${p.desc}</p>
+            <div class="social-proof">${p.socialProof}</div>
+            <div style="font-size:1.8em; font-weight:900; color:var(--trendyol-orange); margin-top:10px;">
+                ${p.price.toLocaleString('tr-TR')} TL
+            </div>
+            <button class="add-cart-btn" style="margin-top:15px; padding:12px;" onclick="addToCart(${p.id}); toggleModal('productDetailModal');">Sepete Ekle</button>
         `;
         toggleModal('productDetailModal');
     }
 
-    // Akıllı Yapay Zeka Mantığı
+    // Kargo Sorgulama
+    function searchCargo() {
+        const code = document.getElementById('trackCodeInput').value.trim();
+        const display = document.getElementById('cargoResultDisplay');
+        if(!code || !cargoOrders[code]) {
+            display.innerHTML = '<p style="color:#ff4757; margin-top:15px;">Kargo bulunamadı!</p>';
+            return;
+        }
+        display.innerHTML = `
+            <ul class="timeline">
+                <li class="timeline-item completed"><div class="timeline-icon">✓</div><div class="timeline-title">Sipariş Alındı</div></li>
+                <li class="timeline-item active"><div class="timeline-icon">📦</div><div class="timeline-title">Satıcı Kargoladı</div></li>
+                <li class="timeline-item"><div class="timeline-icon">🚚</div><div class="timeline-title">Dağıtımda</div></li>
+            </ul>
+        `;
+    }
+
+    // AI Chat
     function sendAIMessage() {
         const input = document.getElementById('aiInput');
         const text = input.value.trim();
@@ -650,44 +768,46 @@
         input.value = '';
 
         setTimeout(() => {
-            let reply = "Size yardımcı olmaktan mutluluk duyarım!";
-            const q = text.toLowerCase();
-
-            if(q.includes('kargo') || q.includes('takip')) {
-                reply = "Kargonuzun durumunu öğrenmek için üst menüdeki 'Kargo Takibi Yap' butonuna basabilir ve TS- ile başlayan kodunuzu girebilirsiniz.";
-            } else if(q.includes('sat') || q.includes('ilan') || q.includes('ürün ekle')) {
-                reply = "TAMSEPET'te ürün satmak çok kolay! En üstteki '+ Ürününü Sat' butonuna basarak fotoğraflı ilan açabilirsiniz. Ürününüz satıldığında size anında bildirim göndeririz!";
-            } else if(q.includes('güvenli') || q.includes('ödeme')) {
-                reply = "Ödemeleriniz TAMSEPET havuz hesabında tutulur. Ürün alıcıya ulaşıp onaylanana kadar satıcıya para aktarılmaz.";
-            }
-
-            msgs.innerHTML += `<div class="chat-msg bot-msg">${reply}</div>`;
+            msgs.innerHTML += `<div class="chat-msg bot-msg">🧺 <strong>SEPO:</strong> Harika bir soru! TAM SEPET PAZAR YERİ'nde güvenle alışveriş yapabilir veya üst menüdeki "Ürününü Sat" butonuna basarak saniyeler içinde ilan verebilirsiniz!</div>`;
             msgs.scrollTop = msgs.scrollHeight;
-        }, 700);
+        }, 600);
     }
 
-    // Yardımcı Fonksiyonlar
-    function toggleFav(id) {
-        if(favorites.includes(id)) favorites = favorites.filter(f => f !== id);
-        else favorites.push(id);
-        document.getElementById('favCount').innerText = favorites.length;
-        renderProducts(products);
+    // Genel Fonksiyonlar
+    function addToCart(id) {
+        cart.push(products.find(i => i.id === id));
+        updateCartUI();
     }
-
+    function updateCartUI() {
+        document.getElementById('cartCount').innerText = cart.length;
+        document.getElementById('cartTotal').innerText = cart.reduce((s, i) => s + i.price, 0).toLocaleString('tr-TR');
+        document.getElementById('cartItems').innerHTML = cart.map(i => `
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                <span>${i.title.substring(0, 20)}...</span>
+                <strong>${i.price} TL</strong>
+            </div>
+        `).join('');
+    }
+    function checkoutCart() {
+        if(cart.length === 0) return alert("Sepetiniz boş!");
+        const code = 'TS-' + Math.floor(100000 + Math.random() * 900000);
+        cargoOrders[code] = true;
+        alert(`Sipariş Alındı! Kargo Kodunuz: ${code}`);
+        cart = []; updateCartUI(); toggleCart();
+    }
+    function filterProducts() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        renderProducts(products.filter(p => p.title.toLowerCase().includes(q) || p.seller.toLowerCase().includes(q)));
+    }
+    function addNotification(m) { notifications.unshift(m); renderNotifications(); }
+    function renderNotifications() {
+        document.getElementById('notifCount').innerText = notifications.length;
+        document.getElementById('notifListContainer').innerHTML = notifications.map(n => `<div style="padding:10px; border-bottom:1px solid #eee;">🔔 ${n}</div>`).join('');
+    }
     function toggleCart() { document.getElementById('cartDrawer').classList.toggle('open'); }
     function toggleAI() { document.getElementById('aiChatBox').classList.toggle('active'); }
-    function toggleModal(id) {
-        const m = document.getElementById(id);
-        m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
-    }
+    function toggleModal(id) { const m = document.getElementById(id); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
     function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
-    function handleLogin(e) {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        document.getElementById('loginBtnText').innerText = email.split('@')[0];
-        toggleModal('loginModal');
-        alert("Giriş yapıldı!");
-    }
 </script>
 
 </body>
