@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sepetcan - Profesyonel Pazar Yeri</title>
+    <title>Sepetcan - Gelişmiş Pazar Yeri</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icon CDN -->
@@ -11,100 +12,65 @@
     <!-- Canvas Confetti CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        /* Kayan Yazı Animasyonu */
-        @keyframes marquee {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        .animate-marquee {
-            display: inline-block;
-            white-space: nowrap;
-            animation: marquee 25s linear infinite;
-        }
-        .animate-marquee:hover {
-            animation-play-state: paused;
-        }
-
-        /* Alışveriş Sepeti/Çantası Maskotu Animasyonları */
-        @keyframes cuteFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(3deg); }
-        }
-        @keyframes eyeBlink {
-            0%, 90%, 100% { transform: scaleY(1); }
-            95% { transform: scaleY(0.1); }
-        }
-        @keyframes handleWiggle {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(-5deg); }
-        }
-        .mascot-animate {
-            animation: cuteFloat 3s ease-in-out infinite;
-        }
-        .mascot-eye {
-            transform-origin: center;
-            animation: eyeBlink 4s infinite;
-        }
-        .mascot-handle {
-            transform-origin: bottom center;
-            animation: handleWiggle 2.5s ease-in-out infinite;
-        }
-
-        .title-click-anim {
-            animation: bouncePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes bouncePop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1) rotate(-2deg); }
-            100% { transform: scale(1); }
-        }
-
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 25s linear infinite; }
+        @keyframes cuteFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        .mascot-animate { animation: cuteFloat 3s ease-in-out infinite; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 transition-colors duration-300 min-h-screen flex flex-col font-sans" id="bodyApp">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
 
-    <!-- ÜST BİLDİRİM BANT (KAYAN YAZI) -->
-    <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white text-xs font-semibold py-2 shadow-md overflow-hidden relative">
+    <!-- ÜST BİLDİRİM & FLAŞ İNDİRİM SAYAÇ BANT -->
+    <div class="bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 text-white text-xs font-semibold py-2 shadow-md overflow-hidden flex justify-between items-center px-4">
         <div class="animate-marquee flex items-center gap-3">
-            <i class="fa-solid fa-shield-halved animate-bounce"></i>
-            <span>Güvence Politikamız: Platformumuzda <b>SADECE %100 SIFIR VE KAPALI KUTU</b> ürünler satılmaktadır! Orijinal Ürün & Hızlı Kargo Garantisi.</span>
-            <i class="fa-solid fa-star text-amber-300"></i>
-            <span>Sepetcan Pazar Yeri ile Güvenli ve Keyifli Alışveriş!</span>
+            <i class="fa-solid fa-bolt text-amber-300 animate-bounce"></i>
+            <span>Süper Fırsatlar Başladı! <b>SEPETCAN100</b> Koduyla 100 TL İndirim Kazanın!</span>
+            <i class="fa-solid fa-shield-halved text-emerald-300"></i>
+            <span>%100 Sıfır Ve Kapalı Kutu Ürün Garantisi.</span>
+        </div>
+        <div class="hidden md:flex items-center gap-2 bg-black/20 px-3 py-0.5 rounded-full text-[11px] font-mono whitespace-nowrap">
+            <span>Flaş İndirim Bitiş:</span>
+            <span id="flashTimer" class="font-bold text-amber-300">03:45:12</span>
         </div>
     </div>
 
-    <!-- ÜST NAVİGASYON VE LOGO -->
+    <!-- HEADER & NAVİGASYON -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-            
             <!-- Logo -->
-            <div id="logoHeader" class="cursor-pointer select-none flex items-center gap-2.5 group" onclick="triggerTitleAnimation()">
-                <div class="bg-indigo-600 text-white p-2.5 rounded-2xl shadow-lg shadow-indigo-200 transform group-hover:scale-105 transition">
+            <div onclick="toggleDashboardView('customer')" class="cursor-pointer flex items-center gap-2.5">
+                <div class="bg-indigo-600 text-white p-2 rounded-2xl shadow-md">
                     <i class="fa-solid fa-bag-shopping text-xl"></i>
                 </div>
-                <div>
-                    <h1 class="text-xl font-extrabold text-indigo-600 tracking-tight flex items-center gap-1">
-                        Sepetcan <span class="text-[10px] bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded-full uppercase">Pazar Yeri</span>
-                    </h1>
-                </div>
+                <h1 class="text-xl font-extrabold text-indigo-600 tracking-tight">Sepetcan <span class="text-[10px] bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded-full uppercase">Pazar Yeri</span></h1>
             </div>
 
-            <!-- Canlı Arama Çubuğu -->
+            <!-- Canlı Arama -->
             <div class="hidden md:flex flex-1 max-w-md relative">
-                <input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="Ürün, kategori veya marka arayın..." class="w-full pl-10 pr-4 py-2 bg-slate-100/80 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs">
+                <input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="Ürün, marka, satıcı veya kategori arayın..." class="w-full pl-10 pr-4 py-2 bg-slate-100 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400 text-sm"></i>
             </div>
 
-            <!-- Sağ Menü Butonları -->
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <!-- Görseldeki Mağaza Paneli Butonu -->
-                <button onclick="toggleDashboardView(true)" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white border border-indigo-200 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
+            <!-- Sağ Buton Grubu -->
+            <div class="flex items-center gap-2">
+                <!-- Cüzdan / Bakiye -->
+                <button onclick="openModal('walletModal')" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-wallet text-emerald-600"></i>
+                    <span id="walletBalance">₺250,00</span>
+                </button>
+
+                <!-- Mağaza Paneli -->
+                <button onclick="toggleDashboardView('seller')" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white border border-indigo-200 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
                     <i class="fa-solid fa-store"></i>
                     <span class="hidden sm:inline">Mağaza Paneli</span>
+                </button>
+
+                <!-- İadelerim -->
+                <button onclick="openModal('returnsModal')" class="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition" title="İade Talepleri">
+                    <i class="fa-solid fa-rotate-left text-lg"></i>
                 </button>
 
                 <!-- Favoriler -->
@@ -114,92 +80,68 @@
                 </button>
 
                 <!-- Kargo Takip -->
-                <button onclick="openModal('trackingModal')" class="relative p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition" title="Kargo Takip">
+                <button onclick="openModal('trackingModal')" class="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition" title="Kargo Takip">
                     <i class="fa-solid fa-truck-fast text-lg"></i>
                 </button>
 
                 <!-- Sepet -->
-                <button onclick="openModal('cartModal')" class="relative bg-indigo-600 text-white hover:bg-indigo-700 px-3.5 py-2 rounded-xl transition flex items-center gap-2 shadow-md shadow-indigo-100">
+                <button onclick="openModal('cartModal')" class="relative bg-indigo-600 text-white hover:bg-indigo-700 px-3.5 py-2 rounded-xl transition flex items-center gap-2 shadow-md">
                     <i class="fa-solid fa-cart-shopping text-sm"></i>
                     <span class="text-xs font-bold hidden sm:inline">Sepet</span>
                     <span id="cartBadge" class="bg-white text-indigo-600 text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center">0</span>
-                </button>
-
-                <!-- Ayarlar -->
-                <button onclick="openModal('settingsModal')" class="p-2 text-slate-500 hover:text-indigo-600 rounded-xl transition">
-                    <i class="fa-solid fa-gear text-lg"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- MÜŞTERİ VİEW (MAĞAZA VE ÜRÜNLER) -->
+    <!-- MÜŞTERİ VİEW -->
     <main id="customerView" class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
 
-        <!-- UYGULAMA İLE UYUMLU UYGUN SEPETCAN MASKOT BANNERI -->
-        <section class="bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div class="space-y-3 z-10 text-center sm:text-left max-w-lg">
-                <div class="inline-flex items-center gap-2 bg-indigo-500/30 border border-indigo-400/30 text-indigo-200 text-xs px-3 py-1 rounded-full backdrop-blur-md">
+        <!-- MASKOT BANNER -->
+        <section class="bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl flex items-center justify-between gap-6">
+            <div class="space-y-3 z-10 max-w-lg">
+                <div class="inline-flex items-center gap-2 bg-indigo-500/30 border border-indigo-400/30 text-indigo-200 text-xs px-3 py-1 rounded-full">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                     <span>%100 Orijinal Sıfır Ürün Garantisi</span>
                 </div>
                 <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                    Alışverişin En Tatlı Hali: <span class="text-pink-400">Sepetcan</span>
+                    Alışverişin En Güvenli Adresi: <span class="text-pink-400">Sepetcan</span>
                 </h2>
                 <p class="text-slate-300 text-xs sm:text-sm">
-                    Binlerce sıfır ürün, uygun fiyatlar ve anında kargo takibiyle hizmetinizde.
+                    Çoklu satıcı karşılaştırmaları, kullanıcı yorumları ve anında iade garantisiyle hemen alışverişe başla!
                 </p>
             </div>
 
-            <!-- Yenilenmiş Uygulama Uyumlu Çanta/Sepet Maskot -->
-            <div class="z-10 flex flex-col items-center cursor-pointer select-none" onclick="mascotTalk()">
-                <div class="relative">
-                    <div id="mascotBubble" class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-slate-800 text-[11px] font-bold px-3 py-1.5 rounded-2xl shadow-xl whitespace-nowrap z-20 border border-indigo-100">
-                        Selam! Ben Sepetcan 🛍️ Tıkla!
-                    </div>
-                    
-                    <!-- UYUMLU SEPET/ÇANTA SVG MASKOT -->
-                    <div class="mascot-animate w-28 h-28 sm:w-36 sm:h-36">
-                        <svg viewBox="0 0 200 200" class="w-full h-full filter drop-shadow-xl">
-                            <!-- Çanta Kulpları -->
-                            <path class="mascot-handle" d="M 70 70 C 70 20, 130 20, 130 70" stroke="#818cf8" stroke-width="12" stroke-linecap="round" fill="none" />
-                            <!-- Çanta Gövdesi -->
-                            <rect x="40" y="65" width="120" height="115" rx="25" fill="#6366f1" />
-                            <!-- Çanta Ön Ceb/Desen -->
-                            <rect x="52" y="80" width="96" height="85" rx="18" fill="#4f46e5" opacity="0.6"/>
-                            <!-- Sevimli Yüz -->
-                            <g class="mascot-eye">
-                                <circle cx="75" cy="110" r="9" fill="#ffffff" />
-                                <circle cx="125" cy="110" r="9" fill="#ffffff" />
-                                <circle cx="77" cy="110" r="4" fill="#0f172a" />
-                                <circle cx="127" cy="110" r="4" fill="#0f172a" />
-                            </g>
-                            <!-- Yanaklar -->
-                            <circle cx="65" cy="122" r="7" fill="#ff758c" opacity="0.7"/>
-                            <circle cx="135" cy="122" r="7" fill="#ff758c" opacity="0.7"/>
-                            <!-- Ağız -->
-                            <path id="mascotMouth" d="M 92 122 Q 100 132 108 122" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none" />
-                        </svg>
-                    </div>
+            <div class="z-10 flex flex-col items-center cursor-pointer" onclick="mascotTalk()">
+                <div class="mascot-animate w-24 h-24 sm:w-32 sm:h-32">
+                    <svg viewBox="0 0 200 200" class="w-full h-full filter drop-shadow-xl">
+                        <path d="M 70 70 C 70 20, 130 20, 130 70" stroke="#818cf8" stroke-width="12" stroke-linecap="round" fill="none" />
+                        <rect x="40" y="65" width="120" height="115" rx="25" fill="#6366f1" />
+                        <circle cx="75" cy="110" r="8" fill="#ffffff" /><circle cx="125" cy="110" r="8" fill="#ffffff" />
+                        <circle cx="77" cy="110" r="4" fill="#0f172a" /><circle cx="127" cy="110" r="4" fill="#0f172a" />
+                        <path d="M 92 122 Q 100 132 108 122" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none" />
+                    </svg>
                 </div>
             </div>
         </section>
 
-        <!-- GELİŞMİŞ FİLTRELEME ALANI -->
+        <!-- GELİŞMİŞ FİLTRELEME & KUPON BANT -->
         <section class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-3 border-b pb-3">
                 <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
                     <i class="fa-solid fa-filter text-indigo-600"></i>
                     <span>Filtrele ve Sırala</span>
                 </h3>
-                <button onclick="resetFilters()" class="text-xs text-indigo-600 font-semibold hover:underline">Filtreleri Temizle</button>
+                <div class="flex gap-2">
+                    <span class="bg-pink-100 text-pink-700 text-xs px-3 py-1 rounded-full font-bold border border-pink-200 cursor-pointer" onclick="applyCouponCode('SEPETCAN100')">Kupon: SEPETCAN100 (100 TL)</span>
+                    <button onclick="resetFilters()" class="text-xs text-indigo-600 font-semibold hover:underline">Filtreleri Sıfırla</button>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                <!-- Kategori Seçimi -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
                 <div>
                     <label class="block font-semibold text-slate-600 mb-1">Kategori</label>
-                    <select id="filterCategory" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-medium outline-none focus:ring-2 focus:ring-indigo-500">
+                    <select id="filterCategory" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="All">Tüm Kategoriler</option>
                         <option value="Elektronik">Elektronik</option>
                         <option value="Moda">Moda</option>
@@ -207,730 +149,689 @@
                     </select>
                 </div>
 
-                <!-- Fiyat Aralığı -->
                 <div>
                     <label class="block font-semibold text-slate-600 mb-1">Max Fiyat: <span id="priceValue" class="text-indigo-600 font-bold">100.000 ₺</span></label>
                     <input type="range" id="filterPrice" min="100" max="100000" step="500" value="100000" oninput="updatePriceLabel(this.value); applyFilters();" class="w-full accent-indigo-600 cursor-pointer">
                 </div>
 
-                <!-- Sıralama -->
+                <div>
+                    <label class="block font-semibold text-slate-600 mb-1">Min Puan</label>
+                    <select id="filterRating" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="0">Tüm Puanlar</option>
+                        <option value="4.5">4.5 ve Üzeri ★</option>
+                        <option value="4.0">4.0 ve Üzeri ★</option>
+                    </select>
+                </div>
+
                 <div>
                     <label class="block font-semibold text-slate-600 mb-1">Sıralama</label>
-                    <select id="filterSort" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-medium outline-none focus:ring-2 focus:ring-indigo-500">
+                    <select id="filterSort" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="default">Varsayılan</option>
                         <option value="low">Fiyat: Düşükten Yükseğe</option>
                         <option value="high">Fiyat: Yüksekten Düşüğe</option>
+                        <option value="rating">En Yüksek Puanlılar</option>
                     </select>
                 </div>
             </div>
         </section>
 
-        <!-- ÜRÜN LİSTESİ -->
+        <!-- ÜRÜN GRID -->
         <section class="space-y-4">
             <div class="flex items-center justify-between">
-                <h3 class="text-base font-bold text-slate-800">Öne Çıkan Sıfır Ürünler</h3>
+                <h3 class="text-base font-bold text-slate-800">Öne Çıkan Ürünler</h3>
                 <span id="productCount" class="text-xs text-slate-500 font-medium">4 Ürün</span>
             </div>
-
-            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                <!-- Ürünler JS ile Yüklenir -->
-            </div>
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
         </section>
     </main>
 
-    <!-- 📸 GÖRSELDEKİ MAĞAZA PANELİ (SEPETCAN MAĞAZACILIK A.Ş.) -->
+    <!-- SATICI PANELİ VİEW -->
     <main id="sellerDashboardView" class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full space-y-6 hidden">
-        
-        <!-- Mağaza Başlık Kartı (Görseldeki Birebir Header) -->
-        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-md shadow-indigo-200">
-                    SC
-                </div>
+                <div class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-md">SC</div>
                 <div>
                     <h2 class="text-xl font-extrabold text-slate-900">Sepetcan Mağazacılık A.Ş.</h2>
-                    <p class="text-xs text-emerald-600 font-bold flex items-center gap-1.5 mt-0.5">
-                        <i class="fa-solid fa-circle-check"></i> Onaylı Kurumsal Satıcı
-                    </p>
+                    <p class="text-xs text-emerald-600 font-bold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Onaylı Kurumsal Satıcı</p>
                 </div>
             </div>
-            <button onclick="toggleDashboardView(false)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i>
-                <span>Mağazaya Dön</span>
+            <button onclick="toggleDashboardView('customer')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition">
+                <i class="fa-solid fa-arrow-left"></i> Mağazaya Dön
             </button>
         </div>
 
-        <!-- 3 İSTATİSTİK KARTI (Görseldeki Gibi) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <!-- Kart 1: Toplam Kâr -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                <div class="space-y-1">
-                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">TOPLAM KÂR</p>
-                    <h3 class="text-2xl font-black text-slate-900">₺69.791,40</h3>
-                    <p class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
-                        <i class="fa-solid fa-arrow-trend-up"></i> Geçen aya göre +%18
-                    </p>
-                </div>
-                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-wallet"></i>
-                </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+                <div><p class="text-[11px] font-bold text-slate-400">TOPLAM KÂR</p><h3 class="text-2xl font-black">₺69.791,40</h3></div>
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-wallet"></i></div>
             </div>
-
-            <!-- Kart 2: Satılan Ürün Sayısı -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                <div class="space-y-1">
-                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">SATILAN ÜRÜN SAYISI</p>
-                    <h3 class="text-2xl font-black text-slate-900">142 Adet</h3>
-                    <p class="text-xs text-indigo-600 font-semibold flex items-center gap-1">
-                        <i class="fa-solid fa-circle-check"></i> Sorunsuz Teslimat
-                    </p>
-                </div>
-                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-box-archive"></i>
-                </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+                <div><p class="text-[11px] font-bold text-slate-400">SATILAN ÜRÜN SAYISI</p><h3 class="text-2xl font-black">142 Adet</h3></div>
+                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-box-archive"></i></div>
             </div>
-
-            <!-- Kart 3: Aktif Ürünler -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                <div class="space-y-1">
-                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">AKTİF ÜRÜNLER</p>
-                    <h3 id="dashActiveCount" class="text-2xl font-black text-slate-900">4 Ürün</h3>
-                    <p class="text-xs text-purple-600 font-semibold flex items-center gap-1">
-                        <i class="fa-solid fa-bolt"></i> Mağaza Yayında
-                    </p>
-                </div>
-                <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-tag"></i>
-                </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+                <div><p class="text-[11px] font-bold text-slate-400">AKTİF ÜRÜNLER</p><h3 id="dashActiveCount" class="text-2xl font-black">4 Ürün</h3></div>
+                <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl"><i class="fa-solid fa-tag"></i></div>
             </div>
         </div>
 
-        <!-- İKİLİ KOLON: YENİ ÜRÜN EKLE & MAĞAZADAKİ ÜRÜNLERİM (Görseldeki İkili Bölüm) -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- Sol: Mağazaya Yeni Ürün Ekle Formu -->
-            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-4">
-                <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 border-b pb-3">
-                    <i class="fa-solid fa-circle-plus text-indigo-600"></i>
-                    <span>Mağazaya Yeni Ürün Ekle</span>
-                </h3>
-
+            <!-- Form -->
+            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-sm font-bold border-b pb-2">Mağazaya Yeni Ürün Ekle</h3>
                 <form onsubmit="handleSellerAddProduct(event)" class="space-y-3 text-xs">
-                    <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Ürün Adı</label>
-                        <input type="text" id="sellerTitle" required placeholder="Örn: Akıllı Saat Pro" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Kategori</label>
-                        <select id="sellerCategory" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                            <option value="Elektronik">Elektronik</option>
-                            <option value="Moda">Moda</option>
-                            <option value="Yaşam">Yaşam</option>
+                    <div><label class="block font-semibold mb-1">Ürün Adı</label><input type="text" id="sellerTitle" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl"></div>
+                    <div><label class="block font-semibold mb-1">Kategori</label>
+                        <select id="sellerCategory" class="w-full px-3 py-2 bg-slate-50 border rounded-xl">
+                            <option value="Elektronik">Elektronik</option><option value="Moda">Moda</option><option value="Yaşam">Yaşam</option>
                         </select>
                     </div>
-
-                    <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Fiyat (TL)</label>
-                        <input type="number" id="sellerPrice" required placeholder="1499" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block font-semibold text-slate-600 mb-1">Görsel URL</label>
-                        <input type="text" id="sellerImg" placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                    </div>
-
-                    <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition shadow-md">
-                        Ürünü Mağazaya Ekle
-                    </button>
+                    <div><label class="block font-semibold mb-1">Fiyat (TL)</label><input type="number" id="sellerPrice" required class="w-full px-3 py-2 bg-slate-50 border rounded-xl"></div>
+                    <div><label class="block font-semibold mb-1">Görsel URL</label><input type="text" id="sellerImg" class="w-full px-3 py-2 bg-slate-50 border rounded-xl"></div>
+                    <button type="submit" class="w-full py-2.5 bg-indigo-600 text-white font-bold rounded-xl">Ürünü Ekle</button>
                 </form>
             </div>
 
-            <!-- Sağ: Mağazadaki Ürünlerim Tablosu -->
-            <div class="lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-4">
-                <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 border-b pb-3">
-                    <i class="fa-solid fa-boxes-packing text-indigo-600"></i>
-                    <span>Mağazadaki Ürünlerim</span>
-                </h3>
-
+            <!-- Tablo -->
+            <div class="lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-sm font-bold border-b pb-2">Mağazadaki Ürünlerim</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase text-[10px]">
-                                <th class="py-2.5 px-2">ÜRÜN</th>
-                                <th class="py-2.5 px-2">KATEGORİ</th>
-                                <th class="py-2.5 px-2">FİYAT</th>
-                                <th class="py-2.5 px-2">SATIŞ</th>
-                                <th class="py-2.5 px-2 text-right">İŞLEM</th>
-                            </tr>
+                            <tr class="border-b text-slate-400 uppercase text-[10px]"><th class="py-2">ÜRÜN</th><th class="py-2">KATEGORİ</th><th class="py-2">FİYAT</th><th class="py-2">SATIŞ</th><th class="py-2 text-right">İŞLEM</th></tr>
                         </thead>
-                        <tbody id="sellerProductTable" class="divide-y divide-slate-100 font-medium text-slate-700">
-                            <!-- Tablo JS ile Doldurulur -->
-                        </tbody>
+                        <tbody id="sellerProductTable" class="divide-y"></tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </main>
 
-    <!-- 💳 ÖDEME YAPMA MODALI -->
-    <div id="checkoutModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
-            <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-credit-card text-indigo-600"></i>
-                    <span>Güvenli Ödeme Ekranı</span>
-                </h3>
-                <button onclick="closeModal('checkoutModal')" class="text-slate-400 hover:text-slate-600">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+    <!-- DETAY MODALI (YORUMLAR, PUAN, BUYBOX, SORU-CEVAP) -->
+    <div id="productDetailModal" class="fixed inset-0 z-50 hidden bg-white overflow-y-auto">
+        <div class="sticky top-0 bg-white border-b px-6 py-3 flex items-center justify-between z-10">
+            <button onclick="closeModal('productDetailModal')" class="text-xs font-bold text-slate-600 flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Geri Dön
+            </button>
+            <button onclick="closeModal('productDetailModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+                <div class="bg-slate-50 rounded-2xl p-4 flex items-center justify-center h-80 border">
+                    <img id="detailImg" src="" class="max-h-full max-w-full object-contain">
+                </div>
             </div>
 
-            <form onsubmit="handlePayment(event)" class="space-y-3 text-xs">
+            <div class="space-y-5 text-xs sm:text-sm">
                 <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Adres Bilgisi</label>
-                    <textarea required placeholder="Teslimat adresi giriniz..." rows="2" class="w-full px-3 py-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-                </div>
-
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Kart Üzerindeki İsim</label>
-                    <input type="text" required placeholder="Ahmet Yılmaz" class="w-full px-3 py-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
-
-                <div>
-                    <label class="block font-semibold text-slate-600 mb-1">Kredi / Banka Kartı Numarası</label>
-                    <input type="text" maxlength="19" required placeholder="0000 0000 0000 0000" class="w-full px-3 py-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold text-slate-600 mb-1">SKT (AA/YY)</label>
-                        <input type="text" placeholder="12/28" required class="w-full px-3 py-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
+                    <div class="flex items-center gap-2">
+                        <span id="detailCategory" class="text-[10px] font-bold text-indigo-600 uppercase"></span>
+                        <span id="detailBadge" class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Çok Satılan</span>
                     </div>
-                    <div>
-                        <label class="block font-semibold text-slate-600 mb-1">CVC / CVV</label>
-                        <input type="text" maxlength="3" required placeholder="123" class="w-full px-3 py-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
+                    <h2 id="detailTitle" class="text-xl font-extrabold text-slate-900 mt-1"></h2>
+                    <div class="flex items-center gap-2 mt-2">
+                        <span id="detailRating" class="text-amber-500 font-bold"></span>
+                        <span id="detailReviewCount" class="text-slate-400 text-xs"></span>
                     </div>
                 </div>
 
-                <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100 flex items-center justify-between text-indigo-900 font-bold">
-                    <span>Ödenecek Tutar:</span>
-                    <span id="checkoutTotal" class="text-base">0 ₺</span>
+                <div class="bg-slate-50 p-4 rounded-2xl border flex items-center justify-between">
+                    <div>
+                        <span id="detailPrice" class="text-2xl font-black text-indigo-600"></span>
+                        <p class="text-[10px] text-slate-400">KDV dahil & Kargo Bedava</p>
+                    </div>
+                    <button id="detailAddToCartBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl shadow-md">
+                        <i class="fa-solid fa-cart-plus"></i> Sepete Ekle
+                    </button>
                 </div>
 
-                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
-                    Ödemeyi Tamamla ve Sipariş Ver
-                </button>
+                <!-- BUYBOX (Diğer Satıcılar) -->
+                <div class="border rounded-2xl p-4 space-y-3 bg-indigo-50/50">
+                    <h4 class="font-bold text-xs text-indigo-900 flex items-center gap-1.5">
+                        <i class="fa-solid fa-store"></i> Diğer Satıcılar (Buybox)
+                    </h4>
+                    <div id="buyboxList" class="space-y-2"></div>
+                </div>
+
+                <!-- TABS: Yorumlar ve Soru-Cevap -->
+                <div class="border-t pt-4">
+                    <div class="flex gap-4 border-b pb-2 font-bold text-xs">
+                        <button onclick="switchTab('reviewsTab')" id="tabReviewsBtn" class="text-indigo-600 border-b-2 border-indigo-600 pb-1">Değerlendirmeler & Yorumlar</button>
+                        <button onclick="switchTab('qaTab')" id="tabQABtn" class="text-slate-400 pb-1">Satıcıya Soru Sor</button>
+                    </div>
+
+                    <!-- Yorumlar Tab -->
+                    <div id="reviewsTab" class="py-3 space-y-3">
+                        <div class="bg-slate-50 p-3 rounded-xl space-y-2 border">
+                            <p class="font-bold">Yorum Yap</p>
+                            <input type="text" id="newReviewText" placeholder="Ürün hakkındaki deneyiminiz..." class="w-full p-2 border rounded-lg text-xs">
+                            <button onclick="addReview()" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Gönder</button>
+                        </div>
+                        <div id="reviewsContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+                    </div>
+
+                    <!-- Soru-Cevap Tab -->
+                    <div id="qaTab" class="py-3 space-y-3 hidden">
+                        <div class="bg-slate-50 p-3 rounded-xl space-y-2 border">
+                            <p class="font-bold">Satıcıya Soru Sor</p>
+                            <input type="text" id="newQAText" placeholder="Merak ettiğiniz detayı yazın..." class="w-full p-2 border rounded-lg text-xs">
+                            <button onclick="addQA()" class="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Soruyu İlet</button>
+                        </div>
+                        <div id="qaContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEPET MODALI (TAKSİT & KUPON UYGULAMA) -->
+    <div id="cartModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <div class="flex justify-between border-b pb-3 font-bold">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-indigo-600"></i> Sepetim</span>
+                <button onclick="closeModal('cartModal')"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="cartItems" class="space-y-3 max-h-52 overflow-y-auto pr-1 text-xs"></div>
+            
+            <!-- Kupon Girişi -->
+            <div class="flex gap-2">
+                <input type="text" id="couponInput" placeholder="Kupon Kodu (Örn: SEPETCAN100)" class="flex-1 px-3 py-2 border rounded-xl text-xs uppercase">
+                <button onclick="applyCoupon()" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold">Uygula</button>
+            </div>
+
+            <div class="border-t pt-3 space-y-2 text-xs">
+                <div class="flex justify-between text-slate-500"><span>Ara Toplam:</span><span id="cartSubtotal">0 ₺</span></div>
+                <div class="flex justify-between text-emerald-600 font-bold"><span>İndirim:</span><span id="cartDiscount">-0 ₺</span></div>
+                <div class="flex justify-between text-base font-extrabold text-slate-900"><span>Toplam:</span><span id="cartTotal" class="text-indigo-600">0 ₺</span></div>
+                <button onclick="openCheckoutModal()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-md">Ödeme Adımına Geç</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ÖDEME MODALI (TAKSİT & CÜZDAN İLE ÖDEME) -->
+    <div id="checkoutModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative text-xs">
+            <div class="flex justify-between border-b pb-3 font-bold">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-credit-card text-indigo-600"></i> Güvenli Ödeme</span>
+                <button onclick="closeModal('checkoutModal')"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form onsubmit="handlePayment(event)" class="space-y-3">
+                <div>
+                    <label class="block font-semibold mb-1">Ödeme Yöntemi</label>
+                    <select id="paymentMethod" onchange="togglePaymentType(this.value)" class="w-full px-3 py-2 border rounded-xl">
+                        <option value="card">Kredi / Banka Kartı</option>
+                        <option value="wallet">Sepetcan Cüzdanım (Bakiye: ₺250,00)</option>
+                    </select>
+                </div>
+
+                <div id="cardFields" class="space-y-3">
+                    <div><label class="block font-semibold mb-1">Kart Numarası</label><input type="text" maxlength="19" required placeholder="0000 0000 0000 0000" class="w-full px-3 py-2 border rounded-xl"></div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="block font-semibold mb-1">SKT</label><input type="text" placeholder="12/28" required class="w-full px-3 py-2 border rounded-xl"></div>
+                        <div><label class="block font-semibold mb-1">CVC</label><input type="text" maxlength="3" required class="w-full px-3 py-2 border rounded-xl"></div>
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Taksit Seçenekleri</label>
+                        <select class="w-full px-3 py-2 border rounded-xl">
+                            <option value="1">Tek Çekim</option>
+                            <option value="3">3 Taksit (Vade Farksız)</option>
+                            <option value="6">6 Taksit (+%3 Vade Farkı)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl shadow-md">Siparişi Onayla</button>
             </form>
         </div>
     </div>
 
-    <!-- 🚚 KARGO TAKİP MODALI -->
-    <div id="trackingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
-            <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-truck-ramp-box text-indigo-600"></i>
-                    <span>Sipariş ve Kargo Takibi</span>
-                </h3>
-                <button onclick="closeModal('trackingModal')" class="text-slate-400 hover:text-slate-600">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+    <!-- İADE / DEĞİŞİM YÖNETİMİ MODALI -->
+    <div id="returnsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative text-xs">
+            <div class="flex justify-between border-b pb-3 font-bold">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-rotate-left text-indigo-600"></i> İade & Değişim Talebi</span>
+                <button onclick="closeModal('returnsModal')"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-
-            <div id="orderList" class="space-y-3 max-h-80 overflow-y-auto pr-1 text-xs">
-                <!-- Siparişler JS ile Doldurulur -->
-            </div>
-        </div>
-    </div>
-
-    <!-- ❤️ FAVORİLER MODALI -->
-    <div id="favoritesModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
-            <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-heart text-pink-500"></i>
-                    <span>Favori Ürünlerim</span>
-                </h3>
-                <button onclick="closeModal('favoritesModal')" class="text-slate-400 hover:text-slate-600">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <div id="favoritesList" class="space-y-3 max-h-80 overflow-y-auto pr-1 text-xs">
-                <!-- Favoriler JS ile Doldurulur -->
-            </div>
-        </div>
-    </div>
-
-    <!-- 🛒 SEPET MODALI -->
-    <div id="cartModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
-            <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-basket-shopping text-indigo-600"></i>
-                    <span>Sepetim</span>
-                </h3>
-                <button onclick="closeModal('cartModal')" class="text-slate-400 hover:text-slate-600">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <div id="cartItems" class="space-y-3 max-h-60 overflow-y-auto pr-1 text-xs">
-                <!-- Sepet JS ile Doldurulur -->
-            </div>
-
-            <div class="border-t pt-3 space-y-3">
-                <div class="flex items-center justify-between text-base font-extrabold">
-                    <span>Toplam:</span>
-                    <span id="cartTotal" class="text-indigo-600">0 ₺</span>
-                </div>
-                <button onclick="openCheckoutModal()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition">
-                    Ödeme Adımına Geç
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🌟 ÜRÜN DETAY MODALI -->
-    <div id="productDetailModal" class="fixed inset-0 z-50 hidden bg-white overflow-y-auto">
-        <div class="sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 py-3 flex items-center justify-between z-10">
-            <button onclick="closeModal('productDetailModal')" class="text-xs font-bold text-slate-600 hover:text-indigo-600 flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i> Geri Dön
-            </button>
-            <button onclick="closeModal('productDetailModal')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <div class="max-w-4xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="space-y-3">
-                <div class="bg-slate-100 rounded-2xl p-4 flex items-center justify-center h-72">
-                    <img id="detailImg" src="" class="max-h-full max-w-full object-contain">
-                </div>
-                <div id="thumbnailContainer" class="flex gap-2 overflow-x-auto pb-1"></div>
-            </div>
-
-            <div class="space-y-4 text-xs sm:text-sm">
+            <p class="text-slate-500">Teslim aldığınız ürünleri 14 gün içerisinde ücretsiz iade edebilirsiniz.</p>
+            <form onsubmit="handleReturnSubmit(event)" class="space-y-3">
                 <div>
-                    <span id="detailCategory" class="text-[10px] font-bold text-indigo-600 uppercase"></span>
-                    <h2 id="detailTitle" class="text-xl font-extrabold text-slate-900 mt-1"></h2>
+                    <label class="block font-semibold mb-1">Sipariş Kodu</label>
+                    <input type="text" required placeholder="Örn: SPT-9482103" class="w-full px-3 py-2 border rounded-xl">
                 </div>
-
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
-                    <span id="detailPrice" class="text-2xl font-black text-indigo-600"></span>
-                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-lg">Kargo Bedava</span>
+                <div>
+                    <label class="block font-semibold mb-1">İade Nedeni</label>
+                    <select class="w-full px-3 py-2 border rounded-xl">
+                        <option>Beden / Boyut Uymadı</option>
+                        <option>Vazgeçtim</option>
+                        <option>Hasarlı / Kusurlu Ürün</option>
+                    </select>
                 </div>
-
-                <p id="detailDesc" class="text-slate-600 text-xs leading-relaxed"></p>
-
-                <button id="detailAddToCartBtn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-cart-plus"></i> Sepete Ekle
-                </button>
-            </div>
+                <button type="submit" class="w-full py-2.5 bg-indigo-600 text-white font-bold rounded-xl">İade Kodu Oluştur</button>
+            </form>
         </div>
     </div>
 
-    <!-- ⚙️ AYARLAR MODALI -->
-    <div id="settingsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <!-- CÜZDAN MODALI -->
+    <div id="walletModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl relative text-xs">
-            <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="text-base font-bold text-slate-800">Ayarlar</h3>
-                <button onclick="closeModal('settingsModal')" class="text-slate-400 hover:text-slate-600">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+            <div class="flex justify-between border-b pb-3 font-bold">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-wallet text-emerald-600"></i> Sepetcan Cüzdan</span>
+                <button onclick="closeModal('walletModal')"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <button onclick="clearAppData()" class="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-semibold rounded-xl transition">
-                Tüm Verileri Sıfırla
-            </button>
+            <div class="bg-emerald-50 p-4 rounded-2xl text-center border border-emerald-200">
+                <p class="text-slate-500 text-[11px]">Mevcut Bakiyeniz</p>
+                <h3 id="modalWalletBalance" class="text-2xl font-black text-emerald-700 mt-1">₺250,00</h3>
+            </div>
+            <button onclick="addBalance()" class="w-full py-2.5 bg-emerald-600 text-white font-bold rounded-xl">+ 100 TL Bakiye Yükle</button>
+        </div>
+    </div>
+
+    <!-- KARGO TAKİP & FAVORİLER & DİĞER MODALLAR -->
+    <div id="favoritesModal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 relative text-xs">
+            <div class="flex justify-between border-b pb-3 font-bold">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-heart text-pink-500"></i> Favorilerim</span>
+                <button onclick="closeModal('favoritesModal')"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="favoritesList" class="space-y-3 max-h-80 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <div id="trackingModal" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 relative text-xs">
+            <div class="flex justify-between border-b pb-3 font-bold">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-truck-fast text-indigo-600"></i> Kargo Takip</span>
+                <button onclick="closeModal('trackingModal')"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="orderList" class="space-y-3 max-h-80 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- CANLI DESTEK / ASİSTAN BOTU -->
+    <div id="chatBot" class="fixed bottom-5 right-5 z-40">
+        <button onclick="toggleChatWindow()" class="w-12 h-12 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition">
+            <i class="fa-solid fa-headset text-xl"></i>
+        </button>
+        <div id="chatWindow" class="hidden absolute bottom-16 right-0 w-80 bg-white rounded-2xl shadow-2xl border p-4 space-y-3 text-xs">
+            <div class="flex justify-between border-b pb-2 font-bold text-indigo-600">
+                <span>Sepetcan Asistan</span>
+                <button onclick="toggleChatWindow()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="chatMessages" class="h-40 overflow-y-auto space-y-2 bg-slate-50 p-2 rounded-xl">
+                <div class="bg-indigo-100 text-indigo-900 p-2 rounded-lg max-w-[80%]">Merhaba! Size nasıl yardımcı olabilirim?</div>
+            </div>
+            <div class="flex gap-2">
+                <input type="text" id="chatInput" placeholder="Sorunuzu yazın..." class="flex-1 p-2 border rounded-xl">
+                <button onclick="sendChatMessage()" class="bg-indigo-600 text-white px-3 rounded-xl font-bold"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- DATA DEĞİŞKENLERİ (GÖRSELDEKİ VERİLERLE UYUMLU) ---
+        // --- VERİ MODELİ ---
+        let walletBalance = 250.00;
+        let appliedDiscount = 0;
+        let activeDetailProductId = null;
+
         let products = [
             {
                 id: 1,
                 title: 'Kablosuz Gürültü Önleyici Kulaklık',
                 category: 'Elektronik',
                 price: 2499,
+                rating: 4.8,
                 sales: 54,
                 images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80'],
-                description: 'Yüksek çözünürlüklü ses kalitesi ve aktif gürültü engelleme özelliği ile sıfır kapalı kutu.'
+                sellers: [
+                    { name: 'Sepetcan Mağazacılık A.Ş.', price: 2499, rating: '4.9 ★' },
+                    { name: 'TeknoMarket', price: 2549, rating: '4.6 ★' }
+                ],
+                reviews: [
+                    { user: 'Ahmet K.', text: 'Harika bir ses kalitesi var, tavsiye ederim.', rating: 5 }
+                ],
+                qa: [
+                    { q: 'Garantisi kaç yıl?', a: '2 yıl resmi distribütör garantilidir.' }
+                ]
             },
             {
                 id: 2,
                 title: 'Minimalist Deri Sırt Çantası',
                 category: 'Moda',
                 price: 899,
+                rating: 4.5,
                 sales: 42,
                 images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80'],
-                description: 'Hakiki deriden imal edilmiş, şık ve dayanıklı günlük sırt çantası.'
+                sellers: [
+                    { name: 'Sepetcan Mağazacılık A.Ş.', price: 899, rating: '4.9 ★' }
+                ],
+                reviews: [],
+                qa: []
             },
             {
                 id: 3,
                 title: 'Akıllı Bileklik Spor Saat',
                 category: 'Elektronik',
                 price: 650,
+                rating: 4.2,
                 sales: 30,
                 images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80'],
-                description: 'Nabız ölçer, adım sayar ve su geçirmezlik garantisi ile sıfır ürün.'
+                sellers: [
+                    { name: 'Sepetcan Mağazacılık A.Ş.', price: 650, rating: '4.9 ★' }
+                ],
+                reviews: [],
+                qa: []
             },
             {
                 id: 4,
                 title: 'Akıllı LED Masa Lambası',
                 category: 'Yaşam',
                 price: 450,
+                rating: 4.6,
                 sales: 16,
                 images: ['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=600&q=80'],
-                description: 'Dokunmatik kontrol ve renk sıcaklığı ayarlı sıfır masa lambası.'
+                sellers: [
+                    { name: 'Sepetcan Mağazacılık A.Ş.', price: 450, rating: '4.9 ★' }
+                ],
+                reviews: [],
+                qa: []
             }
         ];
 
         let cart = [];
         let favorites = [];
         let orders = [
-            {
-                id: 'SPT-9482103',
-                date: '04 Ağustos 2026',
-                status: 'Kargoda',
-                total: 2499,
-                item: 'Kablosuz Gürültü Önleyici Kulaklık'
-            }
+            { id: 'SPT-9482103', date: '04 Ağustos 2026', status: 'Kargoda', total: 2499, item: 'Kablosuz Gürültü Önleyici Kulaklık' }
         ];
 
-        // --- SAYFA YÜKLENDİĞİNDE ---
         window.addEventListener('DOMContentLoaded', () => {
             renderProducts(products);
-            renderSellerTable();
+            renderOrders();
             updateCartUI();
             updateFavUI();
-            renderOrders();
         });
 
-        // --- VİEW GEÇİŞİ (MÜŞTERİ VİEW vs MAĞAZA PANELİ VİEW) ---
-        function toggleDashboardView(showSeller) {
-            const customerView = document.getElementById('customerView');
-            const sellerView = document.getElementById('sellerDashboardView');
-
-            if (showSeller) {
-                customerView.classList.add('hidden');
-                sellerView.classList.remove('hidden');
-                renderSellerTable();
-            } else {
-                sellerView.classList.add('hidden');
-                customerView.classList.remove('hidden');
-            }
-        }
-
-        // --- ÜRÜNLERİ LİSTELEME ---
+        // --- RENDER FONKSİYONLARI ---
         function renderProducts(items) {
             const grid = document.getElementById('productGrid');
             document.getElementById('productCount').innerText = `${items.length} Ürün`;
 
-            if (items.length === 0) {
-                grid.innerHTML = '<div class="col-span-full py-10 text-center text-slate-400 text-xs">Aradığınız kriterlere uygun ürün bulunamadı.</div>';
-                return;
-            }
-
-            grid.innerHTML = items.map(product => {
-                const isFav = favorites.includes(product.id);
+            grid.innerHTML = items.map(p => {
+                const isFav = favorites.includes(p.id);
                 return `
-                <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col group relative">
-                    <!-- Favori Butonu -->
-                    <button onclick="toggleFavorite(${product.id})" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center transition">
-                        <i class="${isFav ? 'fa-solid text-pink-500' : 'fa-regular text-slate-400'} fa-heart text-sm"></i>
+                <div class="bg-white rounded-2xl border overflow-hidden shadow-sm hover:shadow-md transition flex flex-col relative group">
+                    <button onclick="toggleFavorite(${p.id})" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center">
+                        <i class="${isFav ? 'fa-solid text-pink-500' : 'fa-regular text-slate-400'} fa-heart"></i>
                     </button>
-
-                    <div onclick="openProductDetail(${product.id})" class="h-44 bg-slate-50 overflow-hidden cursor-pointer flex items-center justify-center p-3">
-                        <img src="${product.images[0]}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300">
+                    <div onclick="openProductDetail(${p.id})" class="h-44 bg-slate-50 cursor-pointer flex items-center justify-center p-3">
+                        <img src="${p.images[0]}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition">
                     </div>
-
-                    <div class="p-4 flex-1 flex flex-col justify-between space-y-3 text-xs">
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-2 text-xs">
                         <div>
-                            <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">${product.category}</span>
-                            <h4 onclick="openProductDetail(${product.id})" class="font-bold text-slate-800 line-clamp-2 hover:text-indigo-600 cursor-pointer mt-0.5">
-                                ${product.title}
-                            </h4>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold text-indigo-600 uppercase">${p.category}</span>
+                                <span class="text-amber-500 font-bold"><i class="fa-solid fa-star"></i> ${p.rating}</span>
+                            </div>
+                            <h4 onclick="openProductDetail(${p.id})" class="font-bold text-slate-800 line-clamp-2 hover:text-indigo-600 cursor-pointer mt-0.5">${p.title}</h4>
                         </div>
-
-                        <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-                            <span class="text-base font-extrabold text-slate-900">₺${product.price.toLocaleString('tr-TR')}</span>
-                            <button onclick="addToCart(${product.id})" class="bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white p-2.5 rounded-xl transition">
-                                <i class="fa-solid fa-cart-plus text-sm"></i>
+                        <div class="flex items-center justify-between pt-2 border-t">
+                            <span class="text-base font-extrabold">₺${p.price.toLocaleString('tr-TR')}</span>
+                            <button onclick="addToCart(${p.id})" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white p-2 rounded-xl transition">
+                                <i class="fa-solid fa-cart-plus"></i>
                             </button>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
             }).join('');
         }
 
-        // --- GÖRSELDEKİ MAĞAZA TABLOSUNU DOLDURMA ---
-        function renderSellerTable() {
-            const table = document.getElementById('sellerProductTable');
-            document.getElementById('dashActiveCount').innerText = `${products.length} Ürün`;
+        function openProductDetail(id) {
+            activeDetailProductId = id;
+            const p = products.find(x => x.id === id);
+            document.getElementById('detailTitle').innerText = p.title;
+            document.getElementById('detailCategory').innerText = p.category;
+            document.getElementById('detailPrice').innerText = '₺' + p.price.toLocaleString('tr-TR');
+            document.getElementById('detailImg').src = p.images[0];
+            document.getElementById('detailRating').innerText = `★ ${p.rating}`;
+            document.getElementById('detailReviewCount').innerText = `(${p.reviews.length} Değerlendirme)`;
 
-            table.innerHTML = products.map(p => `
-                <tr class="hover:bg-slate-50 transition">
-                    <td class="py-3 px-2 flex items-center gap-2.5">
-                        <img src="${p.images[0]}" class="w-8 h-8 rounded-lg object-contain bg-slate-100 p-0.5">
-                        <span class="font-bold text-slate-800 line-clamp-1">${p.title}</span>
-                    </td>
-                    <td class="py-3 px-2 text-slate-500">${p.category}</td>
-                    <td class="py-3 px-2 font-bold text-slate-900">₺${p.price.toLocaleString('tr-TR')}</td>
-                    <td class="py-3 px-2 text-indigo-600 font-bold">${p.sales || 0} Adet</td>
-                    <td class="py-3 px-2 text-right">
-                        <button onclick="deleteProduct(${p.id})" class="text-red-500 hover:text-red-700 font-bold text-xs flex items-center gap-1 ml-auto">
-                            <i class="fa-solid fa-trash-can"></i> Sil
-                        </button>
-                    </td>
-                </tr>
+            // Buybox Render
+            document.getElementById('buyboxList').innerHTML = p.sellers.map(s => `
+                <div class="flex items-center justify-between bg-white p-2 rounded-xl border text-xs">
+                    <div>
+                        <p class="font-bold text-slate-800">${s.name}</p>
+                        <p class="text-[10px] text-amber-600 font-bold">Satıcı Puanı: ${s.rating}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-extrabold">₺${s.price.toLocaleString('tr-TR')}</span>
+                        <button onclick="addToCart(${p.id})" class="bg-indigo-600 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold">Satıcıdan Al</button>
+                    </div>
+                </div>
             `).join('');
+
+            renderReviews();
+            renderQA();
+            openModal('productDetailModal');
         }
 
-        // --- MAĞAZAYA ÜRÜN EKLEME (SELLER FORM) ---
-        function handleSellerAddProduct(e) {
-            e.preventDefault();
-            const title = document.getElementById('sellerTitle').value;
-            const category = document.getElementById('sellerCategory').value;
-            const price = parseFloat(document.getElementById('sellerPrice').value);
-            const img = document.getElementById('sellerImg').value || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80';
-
-            const newProd = {
-                id: Date.now(),
-                title: title,
-                category: category,
-                price: price,
-                sales: 0,
-                images: [img],
-                description: 'Mağaza tarafından yeni eklenen sıfır kapalı kutu ürün.'
-            };
-
-            products.unshift(newProd);
-            renderProducts(products);
-            renderSellerTable();
-            e.target.reset();
-            alert('Ürün mağazanıza eklendi!');
-        }
-
-        function deleteProduct(id) {
-            products = products.filter(p => p.id !== id);
-            renderProducts(products);
-            renderSellerTable();
-        }
-
-        // --- FİLTRELEME & ARAMA ---
-        function updatePriceLabel(val) {
-            document.getElementById('priceValue').innerText = parseInt(val).toLocaleString('tr-TR') + ' ₺';
-        }
-
-        function applyFilters() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const cat = document.getElementById('filterCategory').value;
-            const maxPrice = parseFloat(document.getElementById('filterPrice').value);
-            const sort = document.getElementById('filterSort').value;
-
-            let filtered = products.filter(p => {
-                const matchesQuery = p.title.toLowerCase().includes(query);
-                const matchesCat = (cat === 'All' || p.category === cat);
-                const matchesPrice = p.price <= maxPrice;
-                return matchesQuery && matchesCat && matchesPrice;
-            });
-
-            if (sort === 'low') filtered.sort((a, b) => a.price - b.price);
-            if (sort === 'high') filtered.sort((a, b) => b.price - a.price);
-
-            renderProducts(filtered);
-        }
-
-        function resetFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('filterCategory').value = 'All';
-            document.getElementById('filterPrice').value = 100000;
-            document.getElementById('filterSort').value = 'default';
-            updatePriceLabel(100000);
-            renderProducts(products);
-        }
-
-        // --- FAVORİ İŞLEMLERİ ---
-        function toggleFavorite(id) {
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(fId => fId !== id);
-            } else {
-                favorites.push(id);
-            }
-            updateFavUI();
-            applyFilters();
-        }
-
-        function updateFavUI() {
-            document.getElementById('favBadge').innerText = favorites.length;
-            const favList = document.getElementById('favoritesList');
-
-            if (favorites.length === 0) {
-                favList.innerHTML = '<p class="text-center text-slate-400 py-6">Favorilere ürün eklenmedi.</p>';
+        // --- YORUM & SORU CEVAP ---
+        function renderReviews() {
+            const p = products.find(x => x.id === activeDetailProductId);
+            const container = document.getElementById('reviewsContainer');
+            if (p.reviews.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-xs">Henüz yorum yapılmamış.</p>';
                 return;
             }
-
-            const favProducts = products.filter(p => favorites.includes(p.id));
-            favList.innerHTML = favProducts.map(p => `
-                <div class="flex items-center justify-between gap-3 p-2 border-b border-slate-100">
-                    <img src="${p.images[0]}" class="w-10 h-10 object-contain rounded bg-slate-50">
-                    <div class="flex-1 min-w-0">
-                        <p class="font-bold text-slate-800 truncate">${p.title}</p>
-                        <p class="text-slate-400">₺${p.price.toLocaleString('tr-TR')}</p>
+            container.innerHTML = p.reviews.map(r => `
+                <div class="bg-slate-50 p-2.5 rounded-xl border space-y-1">
+                    <div class="flex justify-between font-bold text-[11px]">
+                        <span>${r.user}</span>
+                        <span class="text-amber-500">★ ${r.rating}</span>
                     </div>
-                    <button onclick="addToCart(${p.id})" class="bg-indigo-600 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold">Sepete Ekle</button>
+                    <p class="text-slate-600 text-xs">${r.text}</p>
                 </div>
             `).join('');
         }
 
-        // --- SEPET & ÖDEME İŞLEMLERİ ---
-        function addToCart(id) {
-            const prod = products.find(p => p.id === id);
-            const exist = cart.find(c => c.id === id);
-            if (exist) exist.qty++;
-            else cart.push({ ...prod, qty: 1 });
+        function addReview() {
+            const text = document.getElementById('newReviewText').value;
+            if (!text) return;
+            const p = products.find(x => x.id === activeDetailProductId);
+            p.reviews.unshift({ user: 'Siz', text: text, rating: 5 });
+            document.getElementById('newReviewText').value = '';
+            renderReviews();
+        }
 
+        function renderQA() {
+            const p = products.find(x => x.id === activeDetailProductId);
+            const container = document.getElementById('qaContainer');
+            if (p.qa.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-xs">Henüz soru sorulmamış.</p>';
+                return;
+            }
+            container.innerHTML = p.qa.map(q => `
+                <div class="bg-slate-50 p-2.5 rounded-xl border space-y-1">
+                    <p class="font-bold text-indigo-900">S: ${q.q}</p>
+                    <p class="text-slate-600 text-xs">C: ${q.a}</p>
+                </div>
+            `).join('');
+        }
+
+        function addQA() {
+            const text = document.getElementById('newQAText').value;
+            if (!text) return;
+            const p = products.find(x => x.id === activeDetailProductId);
+            p.qa.unshift({ q: text, a: 'Satıcı kısa süre içinde yanıtlayacaktır.' });
+            document.getElementById('newQAText').value = '';
+            renderQA();
+        }
+
+        // --- SEPET & KUPON & ÖDEME ---
+        function applyCouponCode(code) {
+            document.getElementById('couponInput').value = code;
+            openModal('cartModal');
+            applyCoupon();
+        }
+
+        function applyCoupon() {
+            const code = document.getElementById('couponInput').value.toUpperCase();
+            if (code === 'SEPETCAN100') {
+                appliedDiscount = 100;
+                alert('100 TL İndirim Kuponu Uygulandı!');
+            } else {
+                appliedDiscount = 0;
+                alert('Geçersiz Kupon Kodu');
+            }
             updateCartUI();
         }
 
         function updateCartUI() {
             const count = cart.reduce((s, i) => s + i.qty, 0);
-            const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            const total = Math.max(0, subtotal - appliedDiscount);
 
             document.getElementById('cartBadge').innerText = count;
+            document.getElementById('cartSubtotal').innerText = subtotal.toLocaleString('tr-TR') + ' ₺';
+            document.getElementById('cartDiscount').innerText = `-${appliedDiscount} ₺`;
             document.getElementById('cartTotal').innerText = total.toLocaleString('tr-TR') + ' ₺';
-            document.getElementById('checkoutTotal').innerText = total.toLocaleString('tr-TR') + ' ₺';
 
             const cartItems = document.getElementById('cartItems');
             if (cart.length === 0) {
                 cartItems.innerHTML = '<p class="text-center text-slate-400 py-6">Sepetiniz boş.</p>';
                 return;
             }
-
             cartItems.innerHTML = cart.map(item => `
-                <div class="flex items-center justify-between gap-3 p-2 border-b border-slate-100">
+                <div class="flex items-center justify-between p-2 border-b">
                     <img src="${item.images[0]}" class="w-10 h-10 object-contain bg-slate-50 rounded">
-                    <div class="flex-1 min-w-0">
-                        <p class="font-bold text-slate-800 truncate">${item.title}</p>
-                        <p class="text-slate-400">₺${item.price.toLocaleString('tr-TR')} x ${item.qty}</p>
+                    <div class="flex-1 px-2">
+                        <p class="font-bold truncate">${item.title}</p>
+                        <p class="text-slate-400">₺${item.price} x ${item.qty}</p>
                     </div>
-                    <button onclick="removeFromCart(${item.id})" class="text-red-500 font-bold">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button onclick="removeFromCart(${item.id})" class="text-red-500 font-bold"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             `).join('');
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(c => c.id !== id);
-            updateCartUI();
-        }
-
-        function openCheckoutModal() {
-            if (cart.length === 0) return alert('Sepetiniz boş!');
-            closeModal('cartModal');
-            openModal('checkoutModal');
         }
 
         function handlePayment(e) {
             e.preventDefault();
+            const method = document.getElementById('paymentMethod').value;
+            const subtotal = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            const total = Math.max(0, subtotal - appliedDiscount);
+
+            if (method === 'wallet') {
+                if (walletBalance < total) return alert('Cüzdan bakiyeniz yetersiz!');
+                walletBalance -= total;
+                document.getElementById('walletBalance').innerText = `₺${walletBalance.toFixed(2)}`;
+                document.getElementById('modalWalletBalance').innerText = `₺${walletBalance.toFixed(2)}`;
+            }
+
             const orderId = 'SPT-' + Math.floor(1000000 + Math.random() * 9000000);
-            const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
-
-            orders.unshift({
-                id: orderId,
-                date: '04 Ağustos 2026',
-                status: 'Hazırlanıyor',
-                total: total,
-                item: cart.map(c => c.title).join(', ')
-            });
-
+            orders.unshift({ id: orderId, date: '04 Ağustos 2026', status: 'Hazırlanıyor', total: total, item: cart.map(c => c.title).join(', ') });
             cart = [];
+            appliedDiscount = 0;
             updateCartUI();
             renderOrders();
             closeModal('checkoutModal');
-            alert(`🎉 Ödemeniz Alındı! Sipariş Numaranız: ${orderId}`);
+            alert(`🎉 Ödeme Başarılı! Sipariş Kodu: ${orderId}`);
             openModal('trackingModal');
         }
 
-        function renderOrders() {
-            const list = document.getElementById('orderList');
-            if (orders.length === 0) {
-                list.innerHTML = '<p class="text-center text-slate-400 py-6">Henüz siparişiniz yok.</p>';
-                return;
+        // --- ASİSTAN BOTU ---
+        function toggleChatWindow() { document.getElementById('chatWindow').classList.toggle('hidden'); }
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            if (!input.value) return;
+            const msgs = document.getElementById('chatMessages');
+            msgs.innerHTML += `<div class="bg-indigo-600 text-white p-2 rounded-lg max-w-[80%] ml-auto">${input.value}</div>`;
+            setTimeout(() => {
+                msgs.innerHTML += `<div class="bg-indigo-100 text-indigo-900 p-2 rounded-lg max-w-[80%]">Talebiniz kaydedildi, müşteri temsilcimiz birazdan bağlanacaktır.</div>`;
+                msgs.scrollTop = msgs.scrollHeight;
+            }, 600);
+            input.value = '';
+        }
+
+        // --- YARDIMCI FONKSİYONLAR ---
+        function toggleDashboardView(view) {
+            if (view === 'seller') {
+                document.getElementById('customerView').classList.add('hidden');
+                document.getElementById('sellerDashboardView').classList.remove('hidden');
+            } else {
+                document.getElementById('sellerDashboardView').classList.add('hidden');
+                document.getElementById('customerView').classList.remove('hidden');
             }
-
-            list.innerHTML = orders.map(o => `
-                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2">
-                    <div class="flex items-center justify-between text-[10px] font-bold text-slate-400">
-                        <span>KOD: ${o.id}</span>
-                        <span>${o.date}</span>
-                    </div>
-                    <p class="font-bold text-slate-800 line-clamp-1">${o.item}</p>
-                    <div class="flex items-center justify-between pt-2 border-t border-slate-200">
-                        <span class="bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded-md text-[10px]">
-                            🚚 Durum: ${o.status}
-                        </span>
-                        <span class="font-extrabold text-slate-900">₺${o.total.toLocaleString('tr-TR')}</span>
-                    </div>
-                </div>
-            `).join('');
         }
 
-        // --- DETAY MODALI ---
-        function openProductDetail(id) {
-            const p = products.find(x => x.id === id);
-            if (!p) return;
-
-            document.getElementById('detailTitle').innerText = p.title;
-            document.getElementById('detailCategory').innerText = p.category;
-            document.getElementById('detailPrice').innerText = '₺' + p.price.toLocaleString('tr-TR');
-            document.getElementById('detailDesc').innerText = p.description;
-            document.getElementById('detailImg').src = p.images[0];
-
-            document.getElementById('detailAddToCartBtn').onclick = () => {
-                addToCart(p.id);
-                closeModal('productDetailModal');
-            };
-
-            openModal('productDetailModal');
-        }
-
-        // --- MASKOT ETKİLEŞİMİ ---
-        const mascotMessages = [
-            "Tüm siparişlerin kapalı kutu sıfır ürün! 🎉",
-            "Güvenli ve tatlı alışverişler! 🛍️",
-            "Sepetcan ile her şey güvende! ✨"
-        ];
-        function mascotTalk() {
-            const bubble = document.getElementById('mascotBubble');
-            bubble.innerText = mascotMessages[Math.floor(Math.random() * mascotMessages.length)];
-            triggerTitleAnimation();
-        }
-
-        function triggerTitleAnimation() {
-            const logo = document.getElementById('logoHeader');
-            logo.classList.add('title-click-anim');
-            setTimeout(() => logo.classList.remove('title-click-anim'), 400);
-
-            if (typeof confetti === 'function') {
-                confetti({ particleCount: 50, spread: 50, origin: { y: 0.2 } });
-            }
+        function switchTab(tabId) {
+            document.getElementById('reviewsTab').classList.add('hidden');
+            document.getElementById('qaTab').classList.add('hidden');
+            document.getElementById(tabId).classList.remove('hidden');
         }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function mascotTalk() { alert('Sepetcan: Hoş geldiniz! Keyifli alışverişler dilerim! 🛍️'); }
+        function addToCart(id) {
+            const p = products.find(x => x.id === id);
+            const exist = cart.find(x => x.id === id);
+            if (exist) exist.qty++; else cart.push({ ...p, qty: 1 });
+            updateCartUI();
+        }
+        function removeFromCart(id) { cart = cart.filter(x => x.id !== id); updateCartUI(); }
+        function openCheckoutModal() { closeModal('cartModal'); openModal('checkoutModal'); }
+        function toggleFavorite(id) {
+            if (favorites.includes(id)) favorites = favorites.filter(x => x !== id);
+            else favorites.push(id);
+            updateFavUI(); applyFilters();
+        }
+        function updateFavUI() {
+            document.getElementById('favBadge').innerText = favorites.length;
+            const favProducts = products.filter(p => favorites.includes(p.id));
+            document.getElementById('favoritesList').innerHTML = favProducts.map(p => `
+                <div class="flex items-center justify-between p-2 border-b">
+                    <span class="font-bold">${p.title}</span>
+                    <button onclick="addToCart(${p.id})" class="bg-indigo-600 text-white px-2 py-1 rounded text-[10px]">Sepete Ekle</button>
+                </div>
+            `).join('');
+        }
+        function renderOrders() {
+            document.getElementById('orderList').innerHTML = orders.map(o => `
+                <div class="bg-slate-50 p-3 rounded-xl border space-y-1">
+                    <div class="flex justify-between font-bold text-slate-400 text-[10px]"><span>${o.id}</span><span>${o.date}</span></div>
+                    <p class="font-bold">${o.item}</p>
+                    <div class="flex justify-between items-center pt-1"><span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded text-[10px] font-bold">${o.status}</span><span class="font-bold">₺${o.total}</span></div>
+                </div>
+            `).join('');
+        }
+        function applyFilters() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cat = document.getElementById('filterCategory').value;
+            const maxPrice = parseFloat(document.getElementById('filterPrice').value);
+            const minRating = parseFloat(document.getElementById('filterRating').value);
 
-        function clearAppData() {
-            if (confirm('Tüm verileri sıfırlamak istiyor musunuz?')) {
-                cart = []; favorites = [];
-                updateCartUI(); updateFavUI();
-                closeModal('settingsModal');
-            }
+            let filtered = products.filter(p => {
+                return p.title.toLowerCase().includes(query) &&
+                       (cat === 'All' || p.category === cat) &&
+                       p.price <= maxPrice &&
+                       p.rating >= minRating;
+            });
+            renderProducts(filtered);
+        }
+        function resetFilters() { renderProducts(products); }
+        function updatePriceLabel(v) { document.getElementById('priceValue').innerText = parseInt(v).toLocaleString('tr-TR') + ' ₺'; }
+        function togglePaymentType(val) {
+            document.getElementById('cardFields').style.display = (val === 'card') ? 'block' : 'none';
+        }
+        function handleReturnSubmit(e) {
+            e.preventDefault();
+            alert('İade Talebiniz Alındı! İade Kargo Kodunuz: IADE-84920');
+            closeModal('returnsModal');
+        }
+        function addBalance() {
+            walletBalance += 100;
+            document.getElementById('walletBalance').innerText = `₺${walletBalance.toFixed(2)}`;
+            document.getElementById('modalWalletBalance').innerText = `₺${walletBalance.toFixed(2)}`;
+            alert('Cüzdanınıza 100 TL Yüklendi!');
         }
     </script>
 </body>
