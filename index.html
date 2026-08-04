@@ -11,17 +11,50 @@
     <!-- Canvas Confetti CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        @keyframes float {
+        /* Kayan Yazı Animasyonu */
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 25s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* Sevimli Maskot Animasyonları */
+        @keyframes cuteFloat {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(3deg); }
+            50% { transform: translateY(-12px) rotate(4deg); }
+        }
+        @keyframes earWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(8deg); }
+        }
+        @keyframes eyeBlink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
         }
         @keyframes pulseGlow {
             0%, 100% { filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.6)); }
             50% { filter: drop-shadow(0 0 25px rgba(99, 102, 241, 0.8)); }
         }
         .mascot-animate {
-            animation: float 3s ease-in-out infinite, pulseGlow 2s ease-in-out infinite;
+            animation: cuteFloat 3s ease-in-out infinite, pulseGlow 2.5s ease-in-out infinite;
         }
+        .mascot-ear {
+            transform-origin: bottom center;
+            animation: earWiggle 2s ease-in-out infinite;
+        }
+        .mascot-eye {
+            transform-origin: center;
+            animation: eyeBlink 4s infinite;
+        }
+
         .title-click-anim {
             animation: bouncePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -30,6 +63,7 @@
             50% { transform: scale(1.15) rotate(-2deg); }
             100% { transform: scale(1); }
         }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -48,10 +82,14 @@
 </head>
 <body class="bg-slate-50 text-slate-800 transition-colors duration-300 min-h-screen flex flex-col font-sans" id="bodyApp">
 
-    <!-- ÜST BİLDİRİM BANT SIFIR ÜRÜN VURGUSU -->
-    <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs sm:text-sm font-semibold py-2 px-4 text-center shadow-md flex items-center justify-center gap-2">
-        <i class="fa-solid fa-shield-halved animate-bounce"></i>
-        <span>Güvence Politikamız: Platformumuzda <b>SADECE %100 SIFIR VE KAPALI KUTU</b> ürünler satılmaktadır!</span>
+    <!-- ÜST BİLDİRİM BANT (KAYAN YAZI SIFIR ÜRÜN VURGUSU) -->
+    <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs sm:text-sm font-semibold py-2 shadow-md overflow-hidden relative">
+        <div class="animate-marquee flex items-center gap-3">
+            <i class="fa-solid fa-shield-halved animate-bounce"></i>
+            <span>Güvence Politikamız: Platformumuzda <b>SADECE %100 SIFIR VE KAPALI KUTU</b> ürünler satılmaktadır! Müşteri memnuniyeti ve orijinal ürün garantisi veriyoruz.</span>
+            <i class="fa-solid fa-star text-amber-200"></i>
+            <span>Güvence Politikamız: Platformumuzda <b>SADECE %100 SIFIR VE KAPALI KUTU</b> ürünler satılmaktadır!</span>
+        </div>
     </div>
 
     <!-- ÜST NAVİGASYON VE LOGO (Tıklama Efektli Başlık) -->
@@ -119,37 +157,64 @@
                 </p>
             </div>
 
-            <!-- Sağ Animasyonlu Maskot ("Sepetcan") -->
-            <div class="z-10 flex flex-col items-center cursor-pointer group" onclick="mascotTalk()">
+            <!-- Sağ Animasyonlu & Sevimli Yüzlü Maskot ("Sepetcan") -->
+            <div class="z-10 flex flex-col items-center cursor-pointer group select-none" onclick="mascotTalk()">
                 <div class="relative">
                     <!-- Konuşma Balonu -->
                     <div id="mascotBubble" class="absolute -top-12 -left-12 sm:-left-20 bg-white text-slate-800 text-xs font-bold px-3 py-2 rounded-2xl shadow-xl border border-indigo-100 opacity-90 transition-all scale-100 whitespace-nowrap z-20">
                         Merhaba! Ben Sepetcan 👋 Tıkla!
                     </div>
                     
-                    <!-- SVG Animasyonlu Maskot -->
-                    <div class="mascot-animate w-28 h-28 sm:w-36 sm:h-36 flex items-center justify-center">
-                        <svg viewBox="0 0 200 200" class="w-full h-full filter drop-shadow-xl">
-                            <!-- Body -->
-                            <circle cx="100" cy="110" r="70" fill="url(#grad1)" />
+                    <!-- YENİ SEVİMLİ VE ANİMASYONLU SVG MASKOT -->
+                    <div class="mascot-animate w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
+                        <svg viewBox="0 0 200 200" class="w-full h-full filter drop-shadow-2xl">
                             <defs>
-                                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+                                <linearGradient id="cuteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ff758c;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#ff7eb3;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="basketGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:1" />
                                 </linearGradient>
                             </defs>
-                            <!-- Gözler -->
-                            <circle cx="80" cy="95" r="10" fill="#ffffff" />
-                            <circle cx="120" cy="95" r="10" fill="#ffffff" />
-                            <circle cx="82" cy="95" r="5" fill="#1e293b" />
-                            <circle cx="122" cy="95" r="5" fill="#1e293b" />
-                            <!-- Yanaklar -->
-                            <circle cx="70" cy="110" r="7" fill="#f472b6" opacity="0.6"/>
-                            <circle cx="130" cy="110" r="7" fill="#f472b6" opacity="0.6"/>
-                            <!-- Gülümseme -->
-                            <path d="M 85 118 Q 100 135 115 118" stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" />
-                            <!-- Sepet Kulpları / Melek Halesi -->
-                            <ellipse cx="100" cy="35" rx="35" ry="10" fill="none" stroke="#f59e0b" stroke-width="6" class="animate-pulse" />
+
+                            <!-- Tavşan/Kedi Sevimli Kulakları -->
+                            <g class="mascot-ear">
+                                <ellipse cx="65" cy="45" rx="14" ry="35" fill="url(#cuteGrad)" />
+                                <ellipse cx="65" cy="48" rx="7" ry="22" fill="#ffd1dc" />
+                                <ellipse cx="135" cy="45" rx="14" ry="35" fill="url(#cuteGrad)" />
+                                <ellipse cx="135" cy="48" rx="7" ry="22" fill="#ffd1dc" />
+                            </g>
+
+                            <!-- Yuvarlak Ana Baş / Gövde -->
+                            <circle cx="100" cy="115" r="62" fill="url(#cuteGrad)" />
+
+                            <!-- Sepet Detay Alt Bölüm -->
+                            <path d="M 50 120 Q 100 185 150 120 Z" fill="url(#basketGrad)" opacity="0.9" />
+                            <path d="M 45 120 C 45 110, 155 110, 155 120" stroke="#4f46e5" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+                            <!-- Sevimli Büyük Parlak Gözler -->
+                            <g class="mascot-eye">
+                                <circle cx="78" cy="100" r="11" fill="#1e293b" />
+                                <circle cx="122" cy="100" r="11" fill="#1e293b" />
+                                <!-- Işık Yansımaları -->
+                                <circle cx="75" cy="97" r="4" fill="#ffffff" />
+                                <circle cx="81" cy="103" r="1.5" fill="#ffffff" />
+                                <circle cx="119" cy="97" r="4" fill="#ffffff" />
+                                <circle cx="125" cy="103" r="1.5" fill="#ffffff" />
+                            </g>
+
+                            <!-- Pembik Yanaklar -->
+                            <ellipse cx="68" cy="112" rx="8" ry="5" fill="#ff477e" opacity="0.6"/>
+                            <ellipse cx="132" cy="112" rx="8" ry="5" fill="#ff477e" opacity="0.6"/>
+
+                            <!-- Ağız ve Burun -->
+                            <polygon points="100,105 97,109 103,109" fill="#ff477e" />
+                            <path id="mascotMouth" d="M 90 112 Q 100 124 110 112" stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none" />
+
+                            <!-- Sepet Kulp Melek Halesi -->
+                            <path d="M 70 50 Q 100 25 130 50" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" class="animate-pulse" />
                         </svg>
                     </div>
                 </div>
@@ -174,7 +239,7 @@
                     <i class="fa-solid fa-sparkles text-amber-500"></i>
                     <span>Öne Çıkan Sıfır Ürünler</span>
                 </h3>
-                <span id="productCount" class="text-xs text-slate-500 font-medium">6 Ürün Listeleniyor</span>
+                <span id="productCount" class="text-xs text-slate-500 font-medium">4 Ürün Listeleniyor</span>
             </div>
 
             <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -184,7 +249,7 @@
 
     </main>
 
-    <!-- 🌟 TAM EKRAN ÜRÜN DETAY SAYFASI (MODAL) -->
+    <!-- 🌟 TAM EKRAN ÜRÜN DETAY SAYFASI (ÇOKLU FOTOĞRAFLI MODAL) -->
     <div id="productDetailModal" class="fixed inset-0 z-50 hidden bg-white overflow-y-auto transition-all">
         <!-- Detay Üst Bar -->
         <div class="sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 py-3 flex items-center justify-between z-10">
@@ -202,13 +267,21 @@
 
         <!-- Detay İçeriği -->
         <div class="max-w-5xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-10">
-            <!-- Sol: Büyük Görsel -->
+            
+            <!-- Sol: Çoklu Görsel Galerisi -->
             <div class="space-y-4">
-                <div class="bg-slate-100 rounded-3xl p-6 flex items-center justify-center border border-slate-200 shadow-inner relative group">
-                    <img id="detailImg" src="" alt="Ürün Görseli" class="max-h-96 object-contain rounded-2xl transform group-hover:scale-105 transition duration-300">
+                <div class="bg-slate-100 rounded-3xl p-6 flex items-center justify-center border border-slate-200 shadow-inner relative group h-80 sm:h-96">
+                    <img id="detailImg" src="" alt="Ürün Görseli" class="max-h-full max-w-full object-contain rounded-2xl transform group-hover:scale-105 transition duration-300">
                     <span class="absolute top-4 left-4 bg-emerald-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl shadow">
                         SIFIR / KAPALI KUTU
                     </span>
+                </div>
+                <!-- Çoklu Fotoğraf Küçük Önizlemeleri (Thumbnails) -->
+                <div class="space-y-1">
+                    <p class="text-xs font-semibold text-slate-500">Ürün Fotoğrafları:</p>
+                    <div id="thumbnailContainer" class="flex gap-3 overflow-x-auto pb-2">
+                        <!-- Fotoğraf Galerisi JS ile Doldurulur -->
+                    </div>
                 </div>
             </div>
 
@@ -407,8 +480,8 @@
                 </div>
 
                 <div>
-                    <label class="block font-semibold mb-1">Görsel URL</label>
-                    <input type="url" id="addImg" placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <label class="block font-semibold mb-1">Görsel URL'leri (Virgülle Ayırın)</label>
+                    <input type="text" id="addImg" placeholder="https://img1.jpg, https://img2.jpg" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
 
                 <div>
@@ -462,7 +535,7 @@
 
     <!-- JAVASCRIPT MANTIĞI -->
     <script>
-        // --- BAŞLANGIÇ VERİLERİ (SADECE SIFIR ÜRÜNLER) ---
+        // --- BAŞLANGIÇ VERİLERİ (SADECE SIFIR ÜRÜNLER & ÇOKLU FOTOĞRAF DESTEKLİ) ---
         const initialCategories = [
             { id: 'All', name: 'Tüm Sıfır Ürünler', icon: 'fa-border-all' },
             { id: 'Elektronik', name: 'Elektronik', icon: 'fa-laptop' },
@@ -477,7 +550,11 @@
                 title: 'Apple iPhone 15 Pro 128GB (Sıfır Kapalı Kutu)',
                 category: 'Elektronik',
                 price: 64999,
-                image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=500&q=80',
+                images: [
+                    'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=600&q=80'
+                ],
                 description: 'Resmi Apple Türkiye garantili, faturası adınıza kesilecek hiç açılmamış sıfır kutusunda cep telefonu.'
             },
             {
@@ -485,7 +562,10 @@
                 title: 'Sony PlayStation 5 Slim Digital Edition',
                 category: 'Elektronik',
                 price: 21999,
-                image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=500&q=80',
+                images: [
+                    'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80'
+                ],
                 description: '2 Yıl Eurasia garantili, sıfır ürün. Çift kol paketi dâhildir.'
             },
             {
@@ -493,7 +573,10 @@
                 title: 'Dyson V15 Detect Kablosuz Süpürge',
                 category: 'Ev & Yaşam',
                 price: 26499,
-                image: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?auto=format&fit=crop&w=500&q=80',
+                images: [
+                    'https://images.unsplash.com/photo-1558317374-067fb5f30001?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=600&q=80'
+                ],
                 description: 'Orijinal ambalajında, açılmamış güvenlik bantlı sıfır ev temizlik robotu.'
             },
             {
@@ -501,7 +584,10 @@
                 title: 'Nike Air Force 1 "07 Beyaz Erkek Ayakkabı',
                 category: 'Moda',
                 price: 4299,
-                image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=500&q=80',
+                images: [
+                    'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80',
+                    'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=600&q=80'
+                ],
                 description: 'Orijinal kutusunda, etiketleri üzerinde %100 orijinal sıfır spor ayakkabı.'
             }
         ];
@@ -551,7 +637,9 @@
                 return;
             }
 
-            grid.innerHTML = list.map(product => `
+            grid.innerHTML = list.map(product => {
+                const coverImage = (product.images && product.images.length > 0) ? product.images[0] : (product.image || '');
+                return `
                 <div class="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group relative">
                     
                     <!-- SIFIR ROZETİ -->
@@ -561,7 +649,7 @@
 
                     <!-- Ürün Görseli (Detay Sayfası Açar) -->
                     <div onclick="openProductDetail(${product.id})" class="h-48 bg-slate-100 overflow-hidden cursor-pointer flex items-center justify-center p-4">
-                        <img src="${product.image}" alt="${product.title}" class="h-full object-contain group-hover:scale-110 transition duration-300">
+                        <img src="${coverImage}" alt="${product.title}" class="h-full object-contain group-hover:scale-110 transition duration-300">
                     </div>
 
                     <!-- Detaylar -->
@@ -585,19 +673,31 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
-        // --- 🌟 TAM EKRAN ÜRÜN DETAY MODALI AÇMA ---
+        // --- 🌟 TAM EKRAN ÜRÜN DETAY MODALI AÇMA (ÇOKLU FOTOĞRAFLI) ---
         function openProductDetail(id) {
             const product = products.find(p => p.id === id);
             if (!product) return;
+
+            const imageList = product.images || [product.image];
 
             document.getElementById('detailTitle').innerText = product.title;
             document.getElementById('detailCategory').innerText = product.category;
             document.getElementById('detailPrice').innerText = product.price.toLocaleString('tr-TR') + ' ₺';
             document.getElementById('detailDesc').innerText = product.description;
-            document.getElementById('detailImg').src = product.image;
+            
+            // Ana görsel belirleme
+            const mainImg = document.getElementById('detailImg');
+            mainImg.src = imageList[0];
+
+            // Fotoğraf Küçük Önizlemelerini Oluşturma (Thumbnails)
+            const thumbContainer = document.getElementById('thumbnailContainer');
+            thumbContainer.innerHTML = imageList.map((imgUrl, index) => `
+                <img src="${imgUrl}" onclick="switchDetailImage('${imgUrl}', this)" class="w-14 h-14 object-contain rounded-xl border-2 ${index === 0 ? 'border-indigo-600' : 'border-slate-200'} cursor-pointer bg-white p-1 hover:border-indigo-400 transition thumb-item">
+            `).join('');
 
             const btn = document.getElementById('detailAddToCartBtn');
             btn.onclick = () => {
@@ -606,6 +706,13 @@
             };
 
             openModal('productDetailModal');
+        }
+
+        // Görseller arası geçiş fonksiyonu
+        function switchDetailImage(url, thumbElement) {
+            document.getElementById('detailImg').src = url;
+            document.querySelectorAll('.thumb-item').forEach(el => el.classList.replace('border-indigo-600', 'border-slate-200'));
+            thumbElement.classList.replace('border-slate-200', 'border-indigo-600');
         }
 
         // --- 🎉 "TAM SEPET PAZAR YERİ" BAŞLIĞINA TIKLAMA EFEKTİ ---
@@ -629,7 +736,8 @@
             "Tüm ürünler sıfır ve kapalı kutudur! 🎉",
             "Güvenli alışverişin adresi! ✨",
             "Siparişlerin anında kargoda! 🚚",
-            "Harika seçimler yapıyorsun! 👍"
+            "Harika seçimler yapıyorsun! 👍",
+            "Senin için en sevimli indirimleri topluyorum! 💕"
         ];
         function mascotTalk() {
             const bubble = document.getElementById('mascotBubble');
@@ -673,9 +781,11 @@
                 return;
             }
 
-            cartItems.innerHTML = cart.map(item => `
+            cartItems.innerHTML = cart.map(item => {
+                const img = (item.images && item.images.length > 0) ? item.images[0] : (item.image || '');
+                return `
                 <div class="flex items-center justify-between gap-3 p-2 border-b border-slate-100">
-                    <img src="${item.image}" class="w-10 h-10 object-contain rounded-lg bg-slate-50">
+                    <img src="${img}" class="w-10 h-10 object-contain rounded-lg bg-slate-50">
                     <div class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-slate-800 truncate">${item.title}</p>
                         <p class="text-[10px] text-slate-400">${item.price.toLocaleString('tr-TR')} ₺ x ${item.qty}</p>
@@ -684,7 +794,8 @@
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function removeFromCart(id) {
@@ -706,15 +817,17 @@
             const title = document.getElementById('addTitle').value;
             const price = parseFloat(document.getElementById('addPrice').value);
             const category = document.getElementById('addCategory').value;
-            const img = document.getElementById('addImg').value || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=500&q=80';
+            const rawImg = document.getElementById('addImg').value;
             const desc = document.getElementById('addDesc').value || 'Sıfır kapalı kutu ürün.';
+
+            let imagesArray = rawImg ? rawImg.split(',').map(s => s.trim()) : ['https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80'];
 
             const newProduct = {
                 id: Date.now(),
                 title: `${title} (Sıfır)`,
                 category: category,
                 price: price,
-                image: img,
+                images: imagesArray,
                 description: desc
             };
 
